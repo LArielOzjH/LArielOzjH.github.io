@@ -108,7 +108,7 @@ export default function Home() {
         </section>
 
         {/* === SELECTED PUBLICATIONS === */}
-        <section id="publications" className="scroll-mt-20">
+        <section id="publications" className="scroll-mt-20 rounded-2xl bg-slate-50 px-6 py-12">
           <h2 className="text-center text-3xl font-semibold tracking-tight text-slate-900">
             SELECTED PUBLICATIONS
           </h2>
@@ -125,7 +125,7 @@ export default function Home() {
               >
                 {/* 左侧缩略图：更像第一张（小、干净、轻边框） */}
                 <div className="shrink-0">
-                  <div className="relative w-[240px] aspect-[4/3] overflow-hidden rounded-md border border-slate-200 bg-white">
+                  <div className="relative w-[280px] aspect-[4/3] overflow-hidden rounded-md border border-slate-200 bg-white">
                     <img
                       src={pub.image}
                       alt={pub.title}
@@ -140,7 +140,7 @@ export default function Home() {
                   <h3 className="text-xl leading-snug text-slate-900">
                     <a
                       href={pub.links?.paper || pub.links?.website || "#"}
-                      className="text-blue-700 hover:underline"
+                      className="text-slate-900 hover:text-slate-600 transition-colors"
                       target="_blank"
                       rel="noreferrer"
                     >
