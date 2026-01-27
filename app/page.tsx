@@ -67,7 +67,7 @@ export default function Home() {
       </header>
 
       {/* --- 3. Main Content Container --- */}
-      <main className="max-w-4xl mx-auto px-6 py-20 space-y-24">
+      <main className="max-w-6xl mx-auto px-6 py-20 space-y-24">
         
         {/* === ABOUT ME === */}
         <section id="about" className="scroll-mt-20">
@@ -112,7 +112,7 @@ export default function Home() {
           <h2 className="text-center text-3xl font-semibold tracking-tight text-slate-900">
             SELECTED PUBLICATIONS
           </h2>
-          
+
           <div className="mt-10 space-y-10">
             {DATA.publications.map((pub, i) => (
               <motion.article
