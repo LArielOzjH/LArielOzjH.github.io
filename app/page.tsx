@@ -109,40 +109,75 @@ export default function Home() {
 
         {/* === SELECTED PUBLICATIONS === */}
         <section id="publications" className="scroll-mt-20">
-          <h2 className="text-2xl font-bold mb-10 pb-2 border-b border-slate-100">SELECTED PUBLICATIONS</h2>
-          <div className="space-y-12">
+          <h2 className="text-center text-3xl font-semibold tracking-tight text-slate-900">
+            SELECTED PUBLICATIONS
+          </h2>
+          
+          <div className="mt-10 space-y-10">
             {DATA.publications.map((pub, i) => (
-              <motion.div 
-                key={i} 
-                initial="hidden" 
-                whileInView="visible" 
-                viewport={{ once: true }} 
+              <motion.article
+                key={i}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
                 variants={fadeInUp}
-                className="grid md:grid-cols-[200px_1fr] gap-6 group"
+                className="flex gap-8"
               >
-                {/* 论文缩略图 (带阴影效果) */}
-                <div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg shadow-sm border border-slate-100 group-hover:shadow-md transition-shadow">
-                  <img src={pub.image} alt={pub.title} className="h-full w-full object-cover" />
+                {/* 左侧缩略图：更像第一张（小、干净、轻边框） */}
+                <div className="shrink-0">
+                  <div className="relative w-[240px] aspect-[4/3] overflow-hidden rounded-md border border-slate-200 bg-white">
+                    <img
+                      src={pub.image}
+                      alt={pub.title}
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
                 </div>
-                
-                {/* 论文信息 */}
-                <div>
-                  <h3 className="text-lg font-semibold text-slate-900 leading-tight group-hover:text-blue-600 transition-colors">
-                    {pub.title}
+            
+                {/* 右侧文字 */}
+                <div className="min-w-0">
+                  {/* 标题：蓝色链接风格（像第一张） */}
+                  <h3 className="text-xl leading-snug text-slate-900">
+                    <a
+                      href={pub.links?.paper || pub.links?.website || "#"}
+                      className="text-blue-700 hover:underline"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {pub.title}
+                    </a>
                   </h3>
-                  <p className="text-slate-500 mt-2 text-sm">{pub.authors}</p>
-                  <p className="font-medium text-slate-800 text-sm mt-1">{pub.conference}</p>
-                  
-                  <div className="flex gap-3 mt-3 text-xs font-semibold text-blue-600">
-                    {Object.entries(pub.links).map(([key, url]) => (
-                        <a key={key} href={url} className="hover:underline uppercase">{key}</a>
+            
+                  <p className="mt-1 text-sm text-slate-600">{pub.authors}</p>
+            
+                  <p className="mt-1 text-sm text-slate-800">
+                    <span className="font-semibold">{pub.conference}</span>
+                  </p>
+            
+                  {/* 链接：竖线分隔，去掉 uppercase */}
+                  <div className="mt-3 text-sm">
+                    {Object.entries(pub.links).map(([key, url], idx, arr) => (
+                      <span key={key}>
+                        <a
+                          href={url}
+                          className="text-blue-700 hover:underline"
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          {key}
+                        </a>
+                        {idx !== arr.length - 1 && (
+                          <span className="mx-2 text-slate-400">|</span>
+                        )}
+                      </span>
                     ))}
                   </div>
                 </div>
-              </motion.div>
+              </motion.article>
             ))}
           </div>
         </section>
+
 
         {/* === HONORS & AWARDS & COURSES (混合布局) === */}
         <section className="grid md:grid-cols-2 gap-12">
