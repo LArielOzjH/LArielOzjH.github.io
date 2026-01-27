@@ -108,7 +108,7 @@ export default function Home() {
         </section>
 
         {/* === SELECTED PUBLICATIONS === */}
-        <section id="publications" className="scroll-mt-20 rounded-2xl bg-slate-50 px-6 py-12">
+        <section id="publications" className="scroll-mt-20 rounded-2xl bg-slate-50 px-6 py-12 font-[var(--font-raleway)]">
           <h2 className="text-center text-3xl font-semibold tracking-tight text-slate-900">
             SELECTED PUBLICATIONS
           </h2>
