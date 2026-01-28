@@ -39,9 +39,9 @@ export const DATA = {
     },
 
     {
-      title: "DNA Storage",
+      title: "DNA Storage - research landscape and future prospects",
       authors: "Zhuojun Han, Yanyan Fang",
-      conference: "Memory Technology",
+      conference: "Memory Technology courses 2026",
       image: "/paper3.png",
       links: { paper: "#", code: "#" }
     }

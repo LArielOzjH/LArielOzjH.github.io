@@ -76,7 +76,7 @@ function Typewriter({
     <span className={`inline-flex items-baseline ${className}`}>
       <span>{shown}</span>
       {/* cursor */}
-      <span className="ml-1 inline-block w-[10px] h-[1.2em] align-bottom bg-white/90 animate-pulse" />
+      <span className="ml-1 inline-block w-[2px] h-[1.05em] align-baseline bg-white/90 animate-pulse" />
     </span>
   );
 }
@@ -250,7 +250,7 @@ export default function Home() {
             whileInView="visible" 
             viewport={{ once: true }} 
             variants={fadeInUp}
-            className="grid md:grid-cols-[360px_1fr] gap-10 items-start"
+            className="grid md:grid-cols-[450px_1fr] gap-10 items-start"
           >
             {/* 左侧头像 */}
             {/* 头像 + 堆叠底片 */}
@@ -317,7 +317,7 @@ export default function Home() {
                   whileInView="visible"
                   viewport={{ once: true }}
                   variants={fadeInUp}
-                  className="flex gap-8"
+                  className="flex gap-14"
                 >
                   <div className="shrink-0">
                     <div className="relative w-[280px] aspect-[4/3] overflow-hidden rounded-md border border-slate-200 bg-white">
@@ -326,7 +326,7 @@ export default function Home() {
                   </div>
               
                   <div className="min-w-0">
-                    <h3 className="text-xl leading-snug text-slate-900">
+                    <h3 className="text-xl font-medium leading-snug text-slate-900">
                       <a
                         href={pub.links?.paper || pub.links?.website || "#"}
                         className="text-slate-900 hover:text-slate-600 transition-colors"
