@@ -292,7 +292,7 @@ export default function Home() {
             whileInView="visible" 
             viewport={{ once: true }} 
             variants={fadeInUp}
-            className="grid md:grid-cols-[425px_1fr] gap-16 items-start"
+            className="grid md:grid-cols-[430px_1fr] gap-16 items-start"
           >
             {/* 左侧头像 */}
             {/* 头像 + 堆叠底片 */}
