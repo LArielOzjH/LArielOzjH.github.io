@@ -80,9 +80,9 @@ function Typewriter({
     </span>
   );
 }
-
-function NavLinks() {
+function TopNav() {
   const items = [
+    { id: "home", label: "HOME" },
     { id: "about", label: "ABOUT" },
     { id: "publications", label: "RESEARCH" },
     { id: "honors", label: "HONORS" },
@@ -90,29 +90,42 @@ function NavLinks() {
     { id: "blog", label: "BLOG" },
   ];
 
-  const [active, setActive] = React.useState<string>("about");
+  const [active, setActive] = React.useState<string>("home");
+  const [scrolled, setScrolled] = React.useState(false);
 
+  // 1) 过了 hero 就切换样式
   React.useEffect(() => {
-    const ids = items.map((x) => x.id);
+    const hero = document.getElementById("home");
+    if (!hero) return;
 
+    const onScroll = () => {
+      // hero 高度大概 = 1屏；滚出 70% 后切换
+      const trigger = hero.offsetHeight * 0.7;
+      setScrolled(window.scrollY > trigger);
+    };
+
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // 2) Scroll spy：当前模块下划线
+  React.useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        // 找到当前视口里“最靠上/可见比例较高”的 section
         const visible = entries
           .filter((e) => e.isIntersecting)
           .sort((a, b) => (b.intersectionRatio ?? 0) - (a.intersectionRatio ?? 0));
-
         if (visible[0]?.target?.id) setActive(visible[0].target.id);
       },
       {
         root: null,
-        // nav 高度影响：让 section 顶部进入视口一点就算 active
         rootMargin: "-35% 0px -55% 0px",
         threshold: [0.1, 0.2, 0.4, 0.6],
       }
     );
 
-    ids.forEach((id) => {
+    items.forEach(({ id }) => {
       const el = document.getElementById(id);
       if (el) observer.observe(el);
     });
@@ -120,30 +133,46 @@ function NavLinks() {
     return () => observer.disconnect();
   }, []);
 
+  const baseText = scrolled ? "text-slate-900" : "text-white";
+  const hoverText = scrolled ? "hover:text-slate-500" : "hover:text-white/60";
+  const underline = scrolled ? "after:bg-slate-900/90" : "after:bg-white/90";
+
   return (
-    <div className="space-x-8">
-      {items.map((it) => {
-        const isActive = active === it.id;
-        return (
-          <a
-            key={it.id}
-            href={`#${it.id}`}
-            className={[
-              "relative pb-1 transition-colors",
-              "text-white",                 // 默认白色
-              "hover:text-white/60",        // hover 变暗
-              isActive ? "after:opacity-100" : "after:opacity-0",
-              // underline: 用伪元素画下划线
-              "after:absolute after:left-0 after:right-0 after:-bottom-[2px] after:h-[2px] after:bg-white/90 after:transition-opacity",
-            ].join(" ")}
-          >
-            {it.label}
-          </a>
-        );
-      })}
+    <div
+      className={[
+        "transition-colors",
+        scrolled
+          ? "bg-white/95 backdrop-blur border-b border-slate-200"
+          : "bg-transparent",
+      ].join(" ")}
+    >
+      <div className="max-w-6xl mx-auto px-6 py-4 flex justify-end">
+        <div className="space-x-8 text-sm font-medium tracking-wide">
+          {items.map((it) => {
+            const isActive = active === it.id;
+            return (
+              <a
+                key={it.id}
+                href={`#${it.id}`}
+                className={[
+                  "relative pb-1 transition-colors",
+                  baseText,
+                  hoverText,
+                  underline,
+                  isActive ? "after:opacity-100" : "after:opacity-0",
+                  "after:absolute after:left-0 after:right-0 after:-bottom-[2px] after:h-[2px] after:transition-opacity",
+                ].join(" ")}
+              >
+                {it.label}
+              </a>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 }
+
 
 
 export default function Home() {
@@ -151,12 +180,12 @@ export default function Home() {
     <div className="min-h-screen bg-white font-sans text-slate-900">
       
       {/* --- 1. Navigation (透明悬浮) --- */}
-      <nav className="fixed top-0 left-0 right-0 z-50 flex justify-end p-6 text-white/90 font-medium text-sm tracking-wide">
-        <NavLinks />
+      <nav className="fixed top-0 left-0 right-0 z-50">
+        <TopNav />
       </nav>
 
       {/* --- 2. Hero Section (Boyuan-style) --- */}
-      <header className="relative h-screen w-full overflow-hidden">
+      <header id="home" className="relative h-screen w-full overflow-hidden">
         {/* Background image */}
         <div className="absolute inset-0">
           <img
@@ -181,7 +210,7 @@ export default function Home() {
             >
               <h1 className="text-white font-semibold tracking-tight
                              text-5xl md:text-7xl lg:text-8xl">
-                Hi! I&apos;m Ariel.
+                Welcom! I&apos;m Yanyan Fang.
               </h1>
 
               <p className="mt-6 text-white/90 text-lg md:text-2xl leading-relaxed">
