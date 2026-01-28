@@ -80,6 +80,17 @@ function Typewriter({
     </span>
   );
 }
+
+const courseDot = (name: string) => {
+  const n = name.toLowerCase();
+  if (n.includes("probability") || n.includes("statistics")) return "bg-emerald-500/80";
+  if (n.includes("time") || n.includes("series")) return "bg-amber-500/80";
+  if (n.includes("linear") || n.includes("algebra")) return "bg-sky-500/80";
+  if (n.includes("operations") || n.includes("research")) return "bg-indigo-500/80";
+  if (n.includes("embodied") || n.includes("intelligence") || n.includes("ai")) return "bg-violet-500/80";
+  return "bg-slate-400/80";
+};
+
 function TopNav() {
   const items = [
     { id: "home", label: "HOME" },
@@ -115,15 +126,22 @@ function TopNav() {
       (entries) => {
         const visible = entries
           .filter((e) => e.isIntersecting)
-          .sort((a, b) => (b.intersectionRatio ?? 0) - (a.intersectionRatio ?? 0));
-        if (visible[0]?.target?.id) setActive(visible[0].target.id);
+          .map((e) => ({
+            id: (e.target as HTMLElement).id,
+            top: (e.target as HTMLElement).getBoundingClientRect().top,
+          }))
+          // top 越接近 0（但为正或略负）越应该算 active
+          .sort((a, b) => Math.abs(a.top) - Math.abs(b.top));
+    
+        if (visible[0]?.id) setActive(visible[0].id);
       },
       {
         root: null,
-        rootMargin: "-35% 0px -55% 0px",
-        threshold: [0.1, 0.2, 0.4, 0.6],
+        rootMargin: "-25% 0px -65% 0px",
+        threshold: [0, 0.1],
       }
     );
+    
 
     items.forEach(({ id }) => {
       const el = document.getElementById(id);
@@ -206,10 +224,9 @@ export default function Home() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="max-w-3xl"
+              className="max-w-5xl"
             >
-              <h1 className="text-white font-semibold tracking-tight
-                             text-5xl md:text-7xl lg:text-8xl">
+              <h1 className="text-5xl sm:text-6xl md:text-7xl xl:text-8xl font-bold leading-none tracking-tight">
                 Hi! I&apos;m Yanyan Fang.
               </h1>
 
@@ -250,13 +267,13 @@ export default function Home() {
             whileInView="visible" 
             viewport={{ once: true }} 
             variants={fadeInUp}
-            className="grid md:grid-cols-[450px_1fr] gap-10 items-start"
+            className="grid md:grid-cols-[450px_1fr] gap-18 items-start"
           >
             {/* 左侧头像 */}
             {/* 头像 + 堆叠底片 */}
             <div className="relative w-full">
               {/* 底下那块灰色“垫片” */}
-              <div className="absolute -right-6 -bottom-6 h-full w-full bg-gray-100" />
+              <div className="absolute -left-6 -bottom-6 h-full w-full bg-gray-100" />
 
               {/* 上面的头像图 */}
               <div className="relative aspect-square w-full overflow-hidden bg-slate-100 border border-slate-200">
@@ -399,17 +416,14 @@ export default function Home() {
                 {DATA.courses.map((c, i) => (
                   <motion.span
                     key={i}
-                    initial={{ opacity: 0, y: 6 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.25, delay: i * 0.01 }}
-                    className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm text-slate-800
-                               hover:border-slate-300 hover:shadow-sm transition"
+                    className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white
+                               px-4 py-2 text-sm text-slate-800
+                               hover:border-slate-300 hover:shadow-sm transition
+                               hover:bg-slate-50"
                   >
-                    {/* 左侧小色条：克制用一两个色系 */}
-                    <span className="h-2 w-2 rounded-full bg-slate-400" />
+                    <span className={["h-2 w-2 rounded-full", courseDot(c.name)].join(" ")} />
                     <span className="whitespace-nowrap">{c.name}</span>
-                    <span className="text-slate-400">|</span>
+                    <span className="text-slate-300">|</span>
                     <span className="font-mono text-slate-500">{c.grade}</span>
                   </motion.span>
                 ))}
