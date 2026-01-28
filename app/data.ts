@@ -50,22 +50,28 @@ export const DATA = {
   projects: [
     {
       title: "ROS-Based Mobile Robot Obstacle Avoidance with YOLO-FastestV2",
-      desc: "I assembled a small mobile robot from scratch and implemented an on-board obstacle-avoidance pipeline using YOLO-FastestV2 for real-time object detection. The system was developed and integrated on ROS (Robot Operating System), where I built the perception and control stack as modular nodes, handling sensor/image acquisition, inference, and motion commands. The robot leverages detection outputs to perform reactive navigation and collision avoidance, demonstrating an end-to-end embodied AI workflow from hardware integration to deployment-oriented robotics software.",
+      desc: "Built an end-to-end obstacle-avoidance system on a self-assembled mobile robot, enabling real-time perception-to-control navigation. Implemented a YOLO-FastestV2-based detection pipeline within ROS, organized as modular nodes for sensor acquisition, on-board inference, and motion command generation. Demonstrated reliable reactive navigation by translating detection outputs into collision-aware control policies, highlighting a deployment-oriented embodied AI workflow from hardware integration to robotics software.",
       year: "2025",
-      tags: ["Robotics", "ROS", "YOLO"]
+      tags: ["Robotics", "ROS", "YOLO"],
+      image: "/pj1.png",
+      links: { demo: "...", code: "...", paper: "..." } 
     },
     {
       title: "Kaggle CSIRO - Image2Biomass Prediction",
-      desc: "Build models that predict pasture biomass from images, ground-truth measurements, and publicly available datasets. Farmers will use these models to determine when and how to graze their livestock. I ensemble the SigLIP and DinoV3 models and conduct elegant feature engineering and finally hit the browne medal.",
+      desc: "Developed a multimodal regression pipeline to predict pasture biomass from field images and tabular measurements for practical grazing decision support. Combined SigLIP and DINOv3 representations with carefully designed feature engineering and ensembling to improve generalization and robustness. Achieved strong leaderboard performance and earned a Bronze Medal, validating the effectiveness of foundation-model features for real-world agritech forecasting.",
       year: "2026",
-      tags: ["CV", "VLM"]
+      tags: ["CV", "VLM"],
+      image: "/pj2.png",
+      links: { demo: "...", code: "...", paper: "..." } 
     },
 
     {
       title: "On The Difficulty Of Robotic Arm Manipulation Using Imitation Learning And Offline Reinforcement Learning",
-      desc: "I designed a customized robotic manipulation task (PandaPickPlaceBread task using Franka Panda Emika robot) along with a controlled simulation environment based on Robosuite, a simulation framework powered by the MuJoCo physics engine for robot learning. Within this setup, I systematically collected a large set of expert demonstration trajectories including necessary values for policy learning by teleoperation using Keyboard. Using this dataset, I trained three representative policies for rollout evaluation: a behavior cloning (BC) policy implemented as a multi-layer perceptron (MLP), a sequence-based BC policy using a gated recurrent unit (GRU) to model temporal dependencies, and an offline reinforcement learning policy based on Batch-Constrained Q-learning (BCQ).",
+      desc: "Designed a controlled robotic manipulation benchmark (Franka Panda pick-and-place) and collected expert demonstrations via teleoperation for systematic policy evaluation. Built a Robosuite/MuJoCo simulation pipeline and trained representative learners—MLP behavior cloning, sequence-based GRU cloning, and BCQ-style offline reinforcement learning—to compare temporal modeling and offline RL under identical data constraints. Conducted rollout evaluations to characterize failure modes and performance gaps, providing practical insights into why manipulation remains challenging under imitation and offline learning settings.",
       year: "2026",
-      tags: ["IL", "RL"]
+      tags: ["IL", "RL"],
+      image: "/pj3.png",
+      links: { demo: "...", code: "...", paper: "..." } 
     }
   ],
   honors: [

@@ -338,7 +338,7 @@ export default function Home() {
                   >
                     <Mail size={20} />
                   </a>
-                  
+
                   <a
                     href={DATA.profile.social.linkedin}
                     className="p-2 rounded-full bg-slate-900 text-white hover:bg-slate-700 transition-colors"
@@ -478,31 +478,161 @@ export default function Home() {
         </section>
 
         {/* === PROJECTS & EXPERIENCE === */}
-        <section id="projects" className="scroll-mt-20">
-           <h2 className="text-2xl font-bold mb-8 pb-2 border-b border-slate-100">PROJECTS & EXPERIENCE</h2>
-           <div className="grid md:grid-cols-2 gap-6">
-              {DATA.projects.map((proj, i) => (
-                  <motion.div 
-                    key={i}
-                    whileHover={{ y: -5 }}
-                    className="p-6 rounded-xl border border-slate-100 bg-slate-50/50 hover:bg-white hover:shadow-lg transition-all"
+        <section id="projects" className="scroll-mt-24">
+          <div className="flex items-end justify-between gap-6 mb-8">
+            <div>
+              <h2 className="text-2xl font-semibold tracking-tight text-slate-900">PROJECTS</h2>
+              <p className="mt-2 text-slate-600">
+                A few selected projects across embodied AI, CV, and applied ML.
+              </p>
+            </div>
+          </div>
+
+          {(() => {
+            const featured = DATA.projects?.[0];
+            const rest = DATA.projects?.slice(1) ?? [];
+          
+            return (
+              <div className="space-y-10">
+                {/* Featured project */}
+                {featured && (
+                  <motion.article
+                    initial={{ opacity: 0, y: 12 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.45 }}
+                    className="group overflow-hidden border border-slate-200 bg-white hover:border-slate-300 hover:shadow-xl transition"
                   >
-                     <div className="flex justify-between items-start mb-4">
-                        <h3 className="font-semibold text-slate-900">{proj.title}</h3>
-                        <span className="text-xs font-mono text-slate-400">{proj.year}</span>
-                     </div>
-                     <p className="text-sm text-slate-600 mb-4 h-12 line-clamp-2">{proj.desc}</p>
-                     <div className="flex flex-wrap gap-2">
-                        {proj.tags.map((tag, t) => (
-                            <span key={t} className="text-[10px] px-2 py-1 bg-white border border-slate-200 rounded-full text-slate-500">
-                                {tag}
+                    <div className="grid md:grid-cols-[1.2fr_1fr]">
+                      {/* image */}
+                      <div className="relative h-64 md:h-full bg-slate-100 overflow-hidden">
+                        <img
+                          src={featured.image || "/projects/placeholder.webp"}
+                          alt={featured.title}
+                          className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.03]"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent opacity-80" />
+                        <div className="absolute left-6 bottom-5 text-white">
+                          <div className="text-xs tracking-widest uppercase text-white/80">Featured</div>
+                          <div className="mt-1 text-sm font-mono text-white/80">{featured.year}</div>
+                        </div>
+                      </div>
+                
+                      {/* content */}
+                      <div className="p-7 md:p-9">
+                        <div className="flex items-start justify-between gap-4">
+                          <h3 className="text-xl md:text-2xl font-semibold leading-snug text-slate-900">
+                            {featured.title}
+                          </h3>
+                          <span className="shrink-0 text-xs font-mono text-slate-400">{featured.year}</span>
+                        </div>
+                
+                        <p className="mt-4 text-slate-600 leading-relaxed line-clamp-5">
+                          {featured.desc}
+                        </p>
+                
+                        <div className="mt-5 flex flex-wrap gap-2">
+                          {featured.tags?.map((tag: string) => (
+                            <span
+                              key={tag}
+                              className="text-xs px-3 py-1 rounded-full border border-slate-200 bg-slate-50 text-slate-700
+                                         group-hover:bg-white transition"
+                            >
+                              {tag}
                             </span>
-                        ))}
-                     </div>
-                  </motion.div>
-              ))}
-           </div>
+                          ))}
+                        </div>
+                        
+                        {/* links (optional) */}
+                        {featured.links && (
+                          <div className="mt-6 flex flex-wrap gap-4 text-sm">
+                            {Object.entries(featured.links).map(([k, url]) => (
+                              <a
+                                key={k}
+                                href={String(url)}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="inline-flex items-center gap-1 text-slate-700 hover:text-slate-500 transition-colors"
+                              >
+                                {k} <ArrowUpRight size={16} />
+                              </a>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </motion.article>
+                )}
+
+                {/* Grid projects */}
+                <div className="grid md:grid-cols-2 gap-6">
+                  {rest.map((proj: any, i: number) => (
+                    <motion.article
+                      key={i}
+                      initial={{ opacity: 0, y: 12 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.35, delay: i * 0.04 }}
+                      whileHover={{ y: -6 }}
+                      className="group overflow-hidden border border-slate-200 bg-white hover:border-slate-300 hover:shadow-lg transition"
+                    >
+                      <div className="relative h-44 w-full bg-slate-100 overflow-hidden">
+                        <img
+                          src={proj.image || "/projects/placeholder.webp"}
+                          alt={proj.title}
+                          className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.03]"
+                        />
+                        <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/35 to-transparent opacity-0 group-hover:opacity-100 transition" />
+                      </div>
+                  
+                      <div className="p-6">
+                        <div className="flex items-start justify-between gap-4">
+                          <h3 className="text-lg font-semibold leading-snug text-slate-900">
+                            {proj.title}
+                          </h3>
+                          <span className="text-xs font-mono text-slate-400 shrink-0">{proj.year}</span>
+                        </div>
+                  
+                        <p className="mt-3 text-sm text-slate-600 leading-relaxed line-clamp-4">
+                          {proj.desc}
+                        </p>
+                  
+                        <div className="mt-4 flex flex-wrap gap-2">
+                          {proj.tags?.map((tag: string) => (
+                            <span
+                              key={tag}
+                              className="text-xs px-3 py-1 rounded-full border border-slate-200 bg-slate-50 text-slate-700
+                                         group-hover:bg-white transition"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                        
+                        {proj.links && (
+                          <div className="mt-5 flex flex-wrap gap-4 text-sm">
+                            {Object.entries(proj.links).map(([k, url]) => (
+                              <a
+                                key={k}
+                                href={String(url)}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="inline-flex items-center gap-1 text-slate-700 hover:text-slate-500 transition-colors"
+                              >
+                                {k} <ArrowUpRight size={16} />
+                              </a>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </motion.article>
+                  ))}
+                </div>
+              </div>
+            );
+          })()}
         </section>
+
 
         {/* === BLOG (Simple Link) === */}
         <section id="blog" className="py-10 text-center">
