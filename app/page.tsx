@@ -17,8 +17,8 @@ import React from "react";
 function Typewriter({
   words,
   className = "",
-  typingSpeed = 70,   // 每个字符打字速度(ms)
-  deletingSpeed = 35, // 删除速度
+  typingSpeed = 80,   // 每个字符打字速度(ms)
+  deletingSpeed = 55, // 删除速度
   holdMs = 900,       // 打完停留
   pauseMs = 250,      // 切换前停顿
 }: {
@@ -292,7 +292,7 @@ export default function Home() {
             whileInView="visible" 
             viewport={{ once: true }} 
             variants={fadeInUp}
-            className="grid md:grid-cols-[410px_1fr] gap-16 items-start"
+            className="grid md:grid-cols-[425px_1fr] gap-16 items-start"
           >
             {/* 左侧头像 */}
             {/* 头像 + 堆叠底片 */}
