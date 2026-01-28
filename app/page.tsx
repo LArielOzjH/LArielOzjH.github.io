@@ -70,22 +70,29 @@ export default function Home() {
       <main className="max-w-6xl mx-auto px-6 py-20 space-y-24">
         
         {/* === ABOUT ME === */}
-        <section id="about" className="scroll-mt-20">
+        <section id="about" className="scroll-mt-20 font-raleway">
           <motion.div 
             initial="hidden" 
             whileInView="visible" 
             viewport={{ once: true }} 
             variants={fadeInUp}
-            className="grid md:grid-cols-[240px_1fr] gap-10 items-start"
+            className="grid md:grid-cols-[360px_1fr] gap-10 items-start"
           >
             {/* 左侧头像 */}
-            <div className="relative aspect-square w-full overflow-hidden rounded-xl bg-slate-100 shadow-md">
-              <img src={DATA.profile.avatar} alt="Avatar" className="h-full w-full object-cover" />
+            {/* 头像 + 堆叠底片 */}
+            <div className="relative w-full">
+              {/* 底下那块灰色“垫片” */}
+              <div className="absolute -right-3 -bottom-3 h-full w-full bg-slate-200" />
+              
+              {/* 上面的头像图 */}
+              <div className="relative aspect-square w-full overflow-hidden bg-slate-100 border border-slate-200">
+                <img src={DATA.profile.avatar} alt="Avatar" className="h-full w-full object-cover" />
+              </div>
             </div>
             
             {/* 右侧简介 */}
             <div className="space-y-4">
-              <h2 className="text-3xl font-bold tracking-tight text-slate-900">ABOUT ME</h2>
+              <h2 className="text-3xl font-semibold tracking-tight text-slate-900">ABOUT ME</h2>
               <p className="text-slate-600 leading-relaxed text-lg">
                 {DATA.profile.bio}
               </p>
@@ -94,13 +101,26 @@ export default function Home() {
               <div className="flex items-center gap-4 pt-4">
                 <a 
                   href={DATA.profile.resume} 
-                  className="px-5 py-2 bg-slate-900 text-white text-sm font-medium rounded-full hover:bg-slate-700 transition-colors flex items-center gap-2"
+                  className="px-5 py-2 bg-slate-900 text-white text-sm font-medium hover:bg-slate-700 transition-colors"
                 >
-                  <FileText size={16} /> RESUME / CV
+                  RESUME / CV
                 </a>
-                <div className="flex gap-3">
-                   <a href={DATA.profile.social.github} className="p-2 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-full transition-all"><Github size={20}/></a>
-                   <a href={DATA.profile.social.email} className="p-2 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-full transition-all"><Mail size={20}/></a>
+                {/* 往右推：ml-6 / ml-8 自己调 */}
+                <div className="ml-8 flex gap-3">
+                  <a
+                    href={DATA.profile.social.github}
+                    className="p-2 bg-slate-900 text-white hover:bg-slate-700 transition-colors"
+                    aria-label="GitHub"
+                  >
+                    <Github size={20} />
+                  </a>
+                  <a
+                    href={DATA.profile.social.email}
+                    className="p-2 bg-slate-900 text-white hover:bg-slate-700 transition-colors"
+                    aria-label="Email"
+                  >
+                    <Mail size={20} />
+                  </a>
                 </div>
               </div>
             </div>
@@ -108,75 +128,62 @@ export default function Home() {
         </section>
 
         {/* === SELECTED PUBLICATIONS === */}
-        <section id="publications" className="scroll-mt-20 rounded-2xl bg-slate-50 px-6 py-12 font-raleway">
-          <h2 className="text-center text-3xl font-semibold tracking-tight text-slate-900">
-            SELECTED PUBLICATIONS
-          </h2>
+        <section id="publications" className="scroll-mt-20 bg-slate-200 font-raleway">
+          <div className="max-w-6xl mx-auto px-6 py-12">
+            <h2 className="text-center text-3xl font-semibold tracking-tight text-slate-900">
+              SELECTED WORKS
+            </h2>
 
-          <div className="mt-10 space-y-10">
-            {DATA.publications.map((pub, i) => (
-              <motion.article
-                key={i}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                variants={fadeInUp}
-                className="flex gap-8"
-              >
-                {/* 左侧缩略图：更像第一张（小、干净、轻边框） */}
-                <div className="shrink-0">
-                  <div className="relative w-[280px] aspect-[4/3] overflow-hidden rounded-md border border-slate-200 bg-white">
-                    <img
-                      src={pub.image}
-                      alt={pub.title}
-                      className="h-full w-full object-cover"
-                    />
+            <div className="mt-10 space-y-10">
+              {DATA.publications.map((pub, i) => (
+                <motion.article
+                  key={i}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  variants={fadeInUp}
+                  className="flex gap-8"
+                >
+                  <div className="shrink-0">
+                    <div className="relative w-[280px] aspect-[4/3] overflow-hidden rounded-md border border-slate-200 bg-white">
+                      <img src={pub.image} alt={pub.title} className="h-full w-full object-cover" />
+                    </div>
                   </div>
-                </div>
-            
-                {/* 右侧文字 */}
-                <div className="min-w-0">
-                  {/* 标题：蓝色链接风格（像第一张） */}
-                  <h3 className="text-xl leading-snug text-slate-900">
-                    <a
-                      href={pub.links?.paper || pub.links?.website || "#"}
-                      className="text-slate-900 hover:text-slate-600 transition-colors"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      {pub.title}
-                    </a>
-                  </h3>
-            
-                  <p className="mt-1 text-sm text-slate-600">{pub.authors}</p>
-            
-                  <p className="mt-1 text-sm text-slate-800">
-                    <span className="font-semibold">{pub.conference}</span>
-                  </p>
-            
-                  {/* 链接：竖线分隔，去掉 uppercase */}
-                  <div className="mt-3 text-sm">
-                    {Object.entries(pub.links).map(([key, url], idx, arr) => (
-                      <span key={key}>
-                        <a
-                          href={url}
-                          className="text-blue-700 hover:underline"
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          {key}
-                        </a>
-                        {idx !== arr.length - 1 && (
-                          <span className="mx-2 text-slate-400">|</span>
-                        )}
-                      </span>
-                    ))}
+              
+                  <div className="min-w-0">
+                    <h3 className="text-xl leading-snug text-slate-900">
+                      <a
+                        href={pub.links?.paper || pub.links?.website || "#"}
+                        className="text-slate-900 hover:text-slate-600 transition-colors"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        {pub.title}
+                      </a>
+                    </h3>
+              
+                    <p className="mt-1 text-sm text-slate-600">{pub.authors}</p>
+                    <p className="mt-1 text-sm text-slate-800">
+                      <span className="font-semibold">{pub.conference}</span>
+                    </p>
+              
+                    <div className="mt-3 text-sm">
+                      {Object.entries(pub.links).map(([key, url], idx, arr) => (
+                        <span key={key}>
+                          <a href={url} className="text-blue-700 hover:underline" target="_blank" rel="noreferrer">
+                            {key}
+                          </a>
+                          {idx !== arr.length - 1 && <span className="mx-2 text-slate-400">|</span>}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              </motion.article>
-            ))}
+                </motion.article>
+              ))}
+            </div>
           </div>
         </section>
+
 
 
         {/* === HONORS & AWARDS & COURSES (混合布局) === */}
