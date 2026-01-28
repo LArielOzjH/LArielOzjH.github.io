@@ -68,10 +68,10 @@ export const DATA = {
     }
   ],
   honors: [
-    { title: "National Scholarship", year: "2023-2024" },
-    { title: "First Prize, MCM/ICM", year: "2022-2023" },
-    { title: "Browne Medal in Kaggle", year: "2025-2026" },
-    { title: "Secondary Scholarship", year: "2024-2025" },
+    { title: "National Scholarship", year: "2023-2024", desc: "Top 1% in cohort" },
+    { title: "First Prize, MCM/ICM", year: "2022-2023", desc: "Top 5% in cohort" },
+    { title: "Browne Medal in Kaggle", year: "2025-2026", desc: "Top 10% in leaderboard" },
+    { title: "Secondary Scholarship", year: "2024-2025", desc: "Top 10% in cohort" },
   ],
   courses: [
     { name: "Operations Research", grade: "A+" },

@@ -210,7 +210,7 @@ export default function Home() {
             >
               <h1 className="text-white font-semibold tracking-tight
                              text-5xl md:text-7xl lg:text-8xl">
-                Welcom! I&apos;m Yanyan Fang.
+                Hi! I&apos;m Yanyan Fang.
               </h1>
 
               <p className="mt-6 text-white/90 text-lg md:text-2xl leading-relaxed">
@@ -256,7 +256,7 @@ export default function Home() {
             {/* 头像 + 堆叠底片 */}
             <div className="relative w-full">
               {/* 底下那块灰色“垫片” */}
-              <div className="absolute -right-6 -bottom-6 h-full w-full bg-gray-200" />
+              <div className="absolute -right-6 -bottom-6 h-full w-full bg-gray-100" />
 
               {/* 上面的头像图 */}
               <div className="relative aspect-square w-full overflow-hidden bg-slate-100 border border-slate-200">
@@ -280,7 +280,7 @@ export default function Home() {
                   RESUME / CV
                 </a>
                 {/* 往右推：ml-6 / ml-8 自己调 */}
-                <div className="ml-16 flex gap-3">
+                <div className="ml-36 flex gap-3">
                   <a
                     href={DATA.profile.social.github}
                     className="p-2 rounded-full bg-slate-900 text-white hover:bg-slate-700 transition-colors"
@@ -303,7 +303,7 @@ export default function Home() {
         </section>
 
         {/* === SELECTED PUBLICATIONS === */}
-        <section id="publications" className="scroll-mt-20 bg-gray-200 font-raleway relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen">
+        <section id="publications" className="scroll-mt-20 bg-gray-100 font-raleway relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen">
           <div className="max-w-6xl mx-auto px-6 py-12">
             <h2 className="text-center text-3xl font-semibold tracking-tight text-slate-900">
               SELECTED WORKS
@@ -365,28 +365,56 @@ export default function Home() {
         <section id="honors" className="grid md:grid-cols-2 gap-12 scroll-mt-20">
            {/* Awards */}
            <div>
-              <h2 className="text-xl font-bold mb-6 pb-2 border-b border-slate-100">HONORS & AWARDS</h2>
-              <ul className="space-y-4">
+              <h2 className="text-xl font-semibold tracking-tight mb-6 pb-2 border-b border-slate-200">HONORS & AWARDS</h2>
+              <ul className="relative space-y-6">
+                {/* 竖线 */}
+                <div className="absolute left-2 top-0 bottom-0 w-px bg-slate-200" />
                 {DATA.honors.map((item, i) => (
-                    <li key={i} className="flex justify-between text-sm">
-                        <span className="text-slate-700 font-medium">{item.title}</span>
-                        <span className="text-slate-400 font-mono">{item.year}</span>
-                    </li>
+                  <motion.li
+                    key={i}
+                    initial={{ opacity: 0, y: 8 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.35, delay: i * 0.03 }}
+                    className="relative pl-10"
+                  >
+                    {/* 圆点 */}
+                    <span className="absolute left-0 top-1.5 h-4 w-4 rounded-full bg-white border-2 border-slate-400" />
+                    <div className="flex items-start justify-between gap-4">
+                      <div>
+                        <div className="text-slate-900 font-medium">{item.title}</div>
+                        {item.desc && <div className="text-sm text-slate-500 mt-1">{item.desc}</div>}
+                      </div>
+                      <div className="text-sm text-slate-500 font-mono whitespace-nowrap">{item.year}</div>
+                    </div>
+                  </motion.li>
                 ))}
               </ul>
            </div>
 
            {/* Coursework */}
            <div>
-              <h2 className="text-xl font-bold mb-6 pb-2 border-b border-slate-100">SELECTED COURSEWORK</h2>
+              <h2 className="text-xl font-semibold tracking-tight mb-6 pb-2 border-b border-slate-200">SELECTED COURSEWORK</h2>
               <div className="flex flex-wrap gap-2">
-                 {DATA.courses.map((c, i) => (
-                     <div key={i} className="px-3 py-1.5 bg-slate-50 border border-slate-100 rounded text-xs flex gap-2">
-                        <span className="text-slate-700">{c.name}</span>
-                        <span className="text-slate-400 font-mono border-l pl-2">{c.grade}</span>
-                     </div>
-                 ))}
+                {DATA.courses.map((c, i) => (
+                  <motion.span
+                    key={i}
+                    initial={{ opacity: 0, y: 6 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.25, delay: i * 0.01 }}
+                    className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm text-slate-800
+                               hover:border-slate-300 hover:shadow-sm transition"
+                  >
+                    {/* 左侧小色条：克制用一两个色系 */}
+                    <span className="h-2 w-2 rounded-full bg-slate-400" />
+                    <span className="whitespace-nowrap">{c.name}</span>
+                    <span className="text-slate-400">|</span>
+                    <span className="font-mono text-slate-500">{c.grade}</span>
+                  </motion.span>
+                ))}
               </div>
+
            </div>
         </section>
 
