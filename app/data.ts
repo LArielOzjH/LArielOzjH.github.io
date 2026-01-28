@@ -6,14 +6,15 @@ export const DATA = {
     bgImage: "/hero-bg.webp", 
   },
   profile: {
-    name: "Ariel(Yanyan Fang)",
+    name: "Ariel (Yanyan Fang)",
     role: "AI Researcher / Undergraduate Student",
-    bio: "Hi everyone, I am Yanyan Fang, pursuing my undergraduate degree in Fudan Univerisity (FDU) majoring statistics, I am currently a researcher focusing on Generative Models and Reinforcement Learning under Prof Zuxuan Wu's guidance in Fudan Vision and Learning Laboratory (FVL). I have studied Operations Research, Introduction to Embodied Intelligence, Time Series Analysis, Probability Theory and Mathematical Statistics, Feature Engineering, Linear Algebra courses and get all of them A or A+, besides I also self-motivated to learn the Stanford CS231n and CS234, which laid a solid foundation for my further research. Outside of research, I enjoy badmiton, chinese classical dancing and boxing.",
+    bio: "Hi everyone, I am Yanyan Fang, pursuing my undergraduate degree in Fudan Univerisity (FDU) majoring statistics, I am currently a researcher focusing on Generative Models and Reinforcement Learning under Prof Zuxuan Wu's guidance in Fudan Vision and Learning Laboratory (FVL). I have studied Operations Research, Python for Data Analysis, Introduction to Embodied Intelligence, Time Series Analysis, Probability Theory and Mathematical Statistics, Feature Engineering, Linear Algebra courses and get all of them A or A+, besides I also self-motivated to learn the Stanford CS231n and CS234 and actively follow frontier AI research and industry developments to stay current with state-of-the-art methods, which laid a solid foundation for my further research. Outside of research, I enjoy badmiton, chinese classical dancing and boxing.",
     avatar: "/avatar.jpg", 
     social: {
       github: "https://github.com/LArielOzjH",
       email: "mailto:23301050260@m.fudan.edu.cn",
       scholar: "https://scholar.google.com/...",
+      linkedin: "https://www.linkedin.com/in/%E5%A6%8D%E5%A6%8D-%E6%96%B9-59303b3a9/",
     },
     resume: "/resume.pdf" 
   },
@@ -76,10 +77,13 @@ export const DATA = {
   courses: [
     { name: "Operations Research", grade: "A+" },
     { name: "Introduction to Embodied Intelligence", grade: "A" },
-    { name: "Linear Algebra", grade: "A" },
+    { name: "Python for Data Analysis", grade: "A" },
+    { name: "Regression Analysis", grade: "A" },
     { name: "Time Series Analysis", grade: "A" },
     { name: "Probability Theory and Mathematical Statistics", grade: "A" },
     { name: "Feature Engineering", grade: "A" },
+    { name: "Linear Algebra", grade: "A" },
     { name: "MIS", grade: "A+" },
+    { name: "Accounting", grade: "A" },
   ]
 };

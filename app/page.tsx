@@ -2,7 +2,7 @@
 
 import { DATA } from "./data";
 import { motion } from "framer-motion"; // 引入动画库
-import { Github, Mail, FileText, ChevronDown, ArrowUpRight } from "lucide-react";
+import { Github, Mail, FileText, ChevronDown, ArrowUpRight, Linkedin } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -83,13 +83,38 @@ function Typewriter({
 
 const courseDot = (name: string) => {
   const n = name.toLowerCase();
-  if (n.includes("probability") || n.includes("statistics")) return "bg-emerald-500/80";
-  if (n.includes("time") || n.includes("series")) return "bg-amber-500/80";
-  if (n.includes("linear") || n.includes("algebra")) return "bg-sky-500/80";
-  if (n.includes("operations") || n.includes("research")) return "bg-indigo-500/80";
-  if (n.includes("embodied") || n.includes("intelligence") || n.includes("ai")) return "bg-violet-500/80";
+
+  // Math / Stats
+  if (n.includes("probability") || n.includes("statistics") || n.includes("regression"))
+    return "bg-emerald-500/80";
+
+  // Time series
+  if (n.includes("time") || n.includes("series"))
+    return "bg-amber-500/80";
+
+  // Linear algebra / math foundations
+  if (n.includes("linear") || n.includes("algebra"))
+    return "bg-sky-500/80";
+
+  // OR / Optimization
+  if (n.includes("operations") || n.includes("research"))
+    return "bg-indigo-500/80";
+
+  // AI / Robotics
+  if (n.includes("embodied") || n.includes("intelligence") || n === "ai")
+    return "bg-violet-500/80";
+
+  // Data / Engineering
+  if (n.includes("python") || n.includes("feature"))
+    return "bg-cyan-500/80";
+
+  // Business / Management
+  if (n.includes("mis") || n.includes("accounting"))
+    return "bg-rose-500/70";
+
   return "bg-slate-400/80";
 };
+
 
 function TopNav() {
   const items = [
@@ -226,7 +251,7 @@ export default function Home() {
               transition={{ duration: 0.6 }}
               className="max-w-5xl"
             >
-              <h1 className="text-5xl sm:text-6xl md:text-7xl xl:text-8xl font-bold leading-none tracking-tight">
+              <h1 className="text-white text-5xl sm:text-6xl md:text-7xl xl:text-8xl font-bold leading-none tracking-tight">
                 Hi! I&apos;m Yanyan Fang.
               </h1>
 
@@ -267,7 +292,7 @@ export default function Home() {
             whileInView="visible" 
             viewport={{ once: true }} 
             variants={fadeInUp}
-            className="grid md:grid-cols-[450px_1fr] gap-18 items-start"
+            className="grid md:grid-cols-[410px_1fr] gap-16 items-start"
           >
             {/* 左侧头像 */}
             {/* 头像 + 堆叠底片 */}
@@ -312,6 +337,26 @@ export default function Home() {
                     aria-label="Email"
                   >
                     <Mail size={20} />
+                  </a>
+                  
+                  <a
+                    href={DATA.profile.social.linkedin}
+                    className="p-2 rounded-full bg-slate-900 text-white hover:bg-slate-700 transition-colors"
+                    aria-label="LinkedIn"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <Linkedin size={20} />
+                  </a>
+
+                  <a
+                    href={DATA.profile.resume}
+                    className="p-2 rounded-full bg-slate-900 text-white hover:bg-slate-700 transition-colors"
+                    aria-label="CV"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <FileText size={20} />
                   </a>
                 </div>
               </div>
