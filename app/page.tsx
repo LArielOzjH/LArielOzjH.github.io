@@ -12,58 +12,203 @@ const fadeInUp = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
 };
 
+import React from "react";
+
+function Typewriter({
+  words,
+  className = "",
+  typingSpeed = 70,   // 每个字符打字速度(ms)
+  deletingSpeed = 35, // 删除速度
+  holdMs = 900,       // 打完停留
+  pauseMs = 250,      // 切换前停顿
+}: {
+  words: string[];
+  className?: string;
+  typingSpeed?: number;
+  deletingSpeed?: number;
+  holdMs?: number;
+  pauseMs?: number;
+}) {
+  const [idx, setIdx] = React.useState(0);
+  const [sub, setSub] = React.useState(0); // 当前显示到第几个字符
+  const [mode, setMode] = React.useState<"typing" | "holding" | "deleting" | "pausing">("typing");
+
+  const current = words[idx] ?? "";
+
+  React.useEffect(() => {
+    if (!words.length) return;
+
+    let t: number;
+
+    if (mode === "typing") {
+      if (sub < current.length) {
+        t = window.setTimeout(() => setSub(sub + 1), typingSpeed);
+      } else {
+        t = window.setTimeout(() => setMode("holding"), holdMs);
+      }
+    }
+
+    if (mode === "holding") {
+      t = window.setTimeout(() => setMode("deleting"), pauseMs);
+    }
+
+    if (mode === "deleting") {
+      if (sub > 0) {
+        t = window.setTimeout(() => setSub(sub - 1), deletingSpeed);
+      } else {
+        // 下一个词
+        const next = (idx + 1) % words.length;
+        setIdx(next);
+        setMode("pausing");
+      }
+    }
+
+    if (mode === "pausing") {
+      t = window.setTimeout(() => setMode("typing"), pauseMs);
+    }
+
+    return () => window.clearTimeout(t);
+  }, [mode, sub, idx, current, words, typingSpeed, deletingSpeed, holdMs, pauseMs]);
+
+  const shown = current.slice(0, sub);
+
+  return (
+    <span className={`inline-flex items-baseline ${className}`}>
+      <span>{shown}</span>
+      {/* cursor */}
+      <span className="ml-1 inline-block w-[10px] h-[1.2em] align-bottom bg-white/90 animate-pulse" />
+    </span>
+  );
+}
+
+function NavLinks() {
+  const items = [
+    { id: "about", label: "ABOUT" },
+    { id: "publications", label: "RESEARCH" },
+    { id: "honors", label: "HONORS" },
+    { id: "projects", label: "PROJECTS" },
+    { id: "blog", label: "BLOG" },
+  ];
+
+  const [active, setActive] = React.useState<string>("about");
+
+  React.useEffect(() => {
+    const ids = items.map((x) => x.id);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        // 找到当前视口里“最靠上/可见比例较高”的 section
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => (b.intersectionRatio ?? 0) - (a.intersectionRatio ?? 0));
+
+        if (visible[0]?.target?.id) setActive(visible[0].target.id);
+      },
+      {
+        root: null,
+        // nav 高度影响：让 section 顶部进入视口一点就算 active
+        rootMargin: "-35% 0px -55% 0px",
+        threshold: [0.1, 0.2, 0.4, 0.6],
+      }
+    );
+
+    ids.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div className="space-x-8">
+      {items.map((it) => {
+        const isActive = active === it.id;
+        return (
+          <a
+            key={it.id}
+            href={`#${it.id}`}
+            className={[
+              "relative pb-1 transition-colors",
+              "text-white",                 // 默认白色
+              "hover:text-white/60",        // hover 变暗
+              isActive ? "after:opacity-100" : "after:opacity-0",
+              // underline: 用伪元素画下划线
+              "after:absolute after:left-0 after:right-0 after:-bottom-[2px] after:h-[2px] after:bg-white/90 after:transition-opacity",
+            ].join(" ")}
+          >
+            {it.label}
+          </a>
+        );
+      })}
+    </div>
+  );
+}
+
+
 export default function Home() {
   return (
     <div className="min-h-screen bg-white font-sans text-slate-900">
       
       {/* --- 1. Navigation (透明悬浮) --- */}
-      <nav className="fixed top-0 left-0 right-0 z-50 flex justify-end p-6 text-white/90 font-medium text-sm tracking-wide mix-blend-difference">
-        <div className="space-x-8">
-          <a href="#about" className="hover:text-white transition-colors">ABOUT</a>
-          <a href="#publications" className="hover:text-white transition-colors">RESEARCH</a>
-          <a href="#projects" className="hover:text-white transition-colors">PROJECTS</a>
-          <a href="#blog" className="hover:text-white transition-colors">BLOG</a>
-        </div>
+      <nav className="fixed top-0 left-0 right-0 z-50 flex justify-end p-6 text-white/90 font-medium text-sm tracking-wide">
+        <NavLinks />
       </nav>
 
-      {/* --- 2. Hero Section (全屏视觉) --- */}
-      <header className="relative h-screen w-full overflow-hidden flex items-center justify-center">
-        {/* 背景图 (模拟 Boyuan 的机器人背景) */}
-        <div className="absolute inset-0 z-0">
-           {/* 请在 public 放一张 hero-bg.jpg，或者用灰色背景代替测试 */}
-           <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/60 z-10" />
-           <img 
-             src={DATA.hero.bgImage} 
-             alt="Background" 
-             className="h-full w-full object-cover"
-           />
+      {/* --- 2. Hero Section (Boyuan-style) --- */}
+      <header className="relative h-screen w-full overflow-hidden">
+        {/* Background image */}
+        <div className="absolute inset-0">
+          <img
+            src={DATA.hero.bgImage}
+            alt="Background"
+            className="h-full w-full object-cover"
+          />
+          {/* Dark overlay like Boyuan */}
+          <div className="absolute inset-0 bg-black/45" />
+          {/* subtle bottom vignette */}
+          <div className="absolute inset-x-0 bottom-0 h-56 bg-gradient-to-t from-black/55 to-transparent" />
         </div>
 
-        {/* 居中文字 */}
-        <motion.div 
-          initial="hidden" 
-          animate="visible" 
-          variants={fadeInUp}
-          className="relative z-20 text-center text-white max-w-4xl px-4"
-        >
-          <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-6">
-            {DATA.hero.title}
-          </h1>
-          <p className="text-xl md:text-2xl text-white/90 font-light leading-relaxed">
-            {DATA.hero.subtitle} <br/>
-            {DATA.hero.desc}
-          </p>
-        </motion.div>
+        {/* Content: left aligned */}
+        <div className="relative z-10 h-full">
+          <div className="max-w-6xl mx-auto px-6 h-full flex items-center">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="max-w-3xl"
+            >
+              <h1 className="text-white font-semibold tracking-tight
+                             text-5xl md:text-7xl lg:text-8xl">
+                Hi! I&apos;m Ariel.
+              </h1>
 
-        {/* 向下滚动的箭头 */}
-        <motion.div 
-          initial={{ opacity: 0 }} 
-          animate={{ opacity: 1, y: [0, 10, 0] }} 
-          transition={{ delay: 1, duration: 2, repeat: Infinity }}
-          className="absolute bottom-10 z-20 text-white cursor-pointer"
-        >
-           <a href="#about"><ChevronDown size={32} /></a>
-        </motion.div>
+              <p className="mt-6 text-white/90 text-lg md:text-2xl leading-relaxed">
+                Student and Researcher at Fudan University.
+              </p>
+
+              {/* typing line */}
+              <p className="mt-2 text-white/90 text-lg md:text-2xl leading-relaxed">
+                Specialized in{" "}
+                <Typewriter
+                  words={["Statistics", "Generative Models", "Reinforcement Learning"]}
+                  className="text-white font-medium"
+                />
+                .
+              </p>
+            </motion.div>
+          </div>
+
+          {/* down arrow: left bottom like Boyuan */}
+          <div className="absolute left-0 right-0 bottom-10 z-10">
+            <div className="max-w-6xl mx-auto px-6">
+              <a href="#about" className="inline-flex items-center text-white/90 hover:text-white transition-colors">
+                <ChevronDown size={34} />
+              </a>
+            </div>
+          </div>
+        </div>
       </header>
 
       {/* --- 3. Main Content Container --- */}
@@ -82,8 +227,8 @@ export default function Home() {
             {/* 头像 + 堆叠底片 */}
             <div className="relative w-full">
               {/* 底下那块灰色“垫片” */}
-              <div className="absolute -right-3 -bottom-3 h-full w-full bg-slate-200" />
-              
+              <div className="absolute -right-6 -bottom-6 h-full w-full bg-gray-200" />
+
               {/* 上面的头像图 */}
               <div className="relative aspect-square w-full overflow-hidden bg-slate-100 border border-slate-200">
                 <img src={DATA.profile.avatar} alt="Avatar" className="h-full w-full object-cover" />
@@ -106,17 +251,18 @@ export default function Home() {
                   RESUME / CV
                 </a>
                 {/* 往右推：ml-6 / ml-8 自己调 */}
-                <div className="ml-8 flex gap-3">
+                <div className="ml-16 flex gap-3">
                   <a
                     href={DATA.profile.social.github}
-                    className="p-2 bg-slate-900 text-white hover:bg-slate-700 transition-colors"
+                    className="p-2 rounded-full bg-slate-900 text-white hover:bg-slate-700 transition-colors"
                     aria-label="GitHub"
                   >
                     <Github size={20} />
                   </a>
+
                   <a
                     href={DATA.profile.social.email}
-                    className="p-2 bg-slate-900 text-white hover:bg-slate-700 transition-colors"
+                    className="p-2 rounded-full bg-slate-900 text-white hover:bg-slate-700 transition-colors"
                     aria-label="Email"
                   >
                     <Mail size={20} />
@@ -128,7 +274,7 @@ export default function Home() {
         </section>
 
         {/* === SELECTED PUBLICATIONS === */}
-        <section id="publications" className="scroll-mt-20 bg-slate-200 font-raleway">
+        <section id="publications" className="scroll-mt-20 bg-gray-200 font-raleway relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen">
           <div className="max-w-6xl mx-auto px-6 py-12">
             <h2 className="text-center text-3xl font-semibold tracking-tight text-slate-900">
               SELECTED WORKS
@@ -187,7 +333,7 @@ export default function Home() {
 
 
         {/* === HONORS & AWARDS & COURSES (混合布局) === */}
-        <section className="grid md:grid-cols-2 gap-12">
+        <section id="honors" className="grid md:grid-cols-2 gap-12 scroll-mt-20">
            {/* Awards */}
            <div>
               <h2 className="text-xl font-bold mb-6 pb-2 border-b border-slate-100">HONORS & AWARDS</h2>
