@@ -252,11 +252,11 @@ export default function Home() {
               className="max-w-5xl"
             >
               <h1 className="text-white text-5xl sm:text-6xl md:text-7xl xl:text-8xl font-bold leading-none tracking-tight">
-                Hi! I&apos;m Yanyan Fang.
+              {DATA.hero.title}
               </h1>
 
               <p className="mt-6 text-white/90 text-lg md:text-2xl leading-relaxed">
-                Student and Researcher at Fudan University.
+              {DATA.hero.subtitle}
               </p>
 
               {/* typing line */}
