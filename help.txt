@@ -1,0 +1,27 @@
+############################################################
+*Personal web维护方法：
+
+所有控制格式的位于              ./app/page.tsx
+所有内容位于                   ./app/data.ts
+所有需要的图片和文档位于         ./public
+
+So需要改内容的话基本就动data.ts以及改动./public下的文件就可以了
+
+
+每次改动后要推送到github，采用如下命令更新：
+git status
+git add .
+git status
+git commit -m "update content"
+git push
+等待1-2分钟即可
+如果网页没有及时更新，大概率是有缓存，用cmd+shift+R清除缓存刷新即可
+
+############################################################
+
+怎么换挂载节点？
+git remote -v
+git remote set-url origin https://github.com/NEWUSER/NEWUSER.github.io.git
+git push -u origin main
+即可
+最后进入NEWUSER.github.io页面即可看到主页

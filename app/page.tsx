@@ -295,9 +295,9 @@ export default function Home() {
             className="grid md:grid-cols-[430px_1fr] gap-16 items-start"
           >
             {/* 左侧头像 */}
-            {/* 头像 + 堆叠底片 */}
+            {/* 头像 + 堆叠 */}
             <div className="relative w-full">
-              {/* 底下那块灰色“垫片” */}
+              {/* 底下那块灰色 */}
               <div className="absolute -left-6 -bottom-6 h-full w-full bg-gray-100" />
 
               {/* 上面的头像图 */}
@@ -321,7 +321,7 @@ export default function Home() {
                 >
                   RESUME / CV
                 </a>
-                {/* 往右推：ml-6 / ml-8 自己调 */}
+                {/* 往右推 */}
                 <div className="ml-36 flex gap-3">
                   <a
                     href={DATA.profile.social.github}
@@ -423,7 +423,7 @@ export default function Home() {
 
 
 
-        {/* === HONORS & AWARDS & COURSES (混合布局) === */}
+        {/* === HONORS & AWARDS & COURSES === */}
         <section id="honors" className="grid md:grid-cols-2 gap-12 scroll-mt-20">
            {/* Awards */}
            <div>

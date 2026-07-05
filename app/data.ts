@@ -1,18 +1,18 @@
 export const DATA = {
   hero: {
-    title: "Hi! I'm Ariel.", 
-    subtitle: "Student and Researcher at Fudan University.",
+    title: "Hi! I'm Lando.", 
+    subtitle: "Student and Researcher at Fudan University (FDU).",
     desc: "Specialized in Statistics, Generative Models, Reinforcement Learning.",
     bgImage: "/hero-bg.webp", 
   },
   profile: {
-    name: "Ariel (Yanyan Fang)",
-    role: "AI Researcher / Undergraduate Student",
-    bio: "Hi everyone, I am Yanyan Fang, pursuing my undergraduate degree in Fudan Univerisity (FDU) majoring statistics, I am currently a researcher focusing on Generative Models and Reinforcement Learning under Prof Zuxuan Wu's guidance in Fudan Vision and Learning Laboratory (FVL). I have studied Operations Research, Python for Data Analysis, Introduction to Embodied Intelligence, Time Series Analysis, Probability Theory and Mathematical Statistics, Feature Engineering, Linear Algebra courses and get all of them A or A+, besides I also self-motivated to learn the Stanford CS231n and CS234 and actively follow frontier AI research and industry developments to stay current with state-of-the-art methods, which laid a solid foundation for my further research. Outside of research, I enjoy badmiton, chinese classical dancing and boxing.",
+    name: "Zhuojun Han (Lando)",
+    role: "AI Chips Researcher / Undergraduate Student",
+    bio: "Hi everyone, I am Zhuojun Han, pursuing my undergraduate degree in Fudan Univerisity (FDU) majoring microelectronic engineering, I am currently a researcher focusing on AI accelerators (Computing-in-Memory Circuit / Heterogeneous Computing Arch) and AI infrastructure (Distributed Training / Efficient Inference) under Prof Haozhe Zhu's guidance in State Key Laboratory of Integrated Chips and Systems (SKLICS) in Fudan University. I have studied Programming Massively Parallel Processors (PMPP), General-Purpose GPU Programming and Architecture (GPGPA), Computer Architecture and SoC Design, Introduction to AI Chip Design, Pattern Recognition and Machine Learning (PRML), Principles of Memory Systems, Advanced IC Packaging courses and get all of them A, besides I am also self-motivated to actively follow frontier AI research and industry developments to stay current with state-of-the-art methods, which laid a solid foundation for my further research.Outside of research, I enjoy F1, soccer and listening to music.",
     avatar: "/avatar.jpg", 
     social: {
       github: "https://github.com/LArielOzjH",
-      email: "mailto:23301050260@m.fudan.edu.cn",
+      email: "mailto:zjhan23@m.fudan.edu.cn",
       scholar: "https://scholar.google.com/...",
       linkedin: "https://www.linkedin.com/in/%E5%A6%8D%E5%A6%8D-%E6%96%B9-59303b3a9/",
     },
@@ -49,10 +49,10 @@ export const DATA = {
   ],
   projects: [
     {
-      title: "ROS-Based Mobile Robot Obstacle Avoidance with YOLO-FastestV2",
-      desc: "Built an end-to-end obstacle-avoidance system on a self-assembled mobile robot, enabling real-time perception-to-control navigation. Implemented a YOLO-FastestV2-based detection pipeline within ROS, organized as modular nodes for sensor acquisition, on-board inference, and motion command generation. Demonstrated reliable reactive navigation by translating detection outputs into collision-aware control policies, highlighting a deployment-oriented embodied AI workflow from hardware integration to robotics software.",
+      title: "Ternary LLM CIM Accelerator",
+      desc: "We conducted algorithm–hardware co-design and developed a high-energy-efficiency, high-accuracy compute-in-memory (CIM) macro for ternary-quantized edge inference. By integrating innovations including SFDE, HierL4LUT, APSAU, and SMAT, together with extensive experimental evaluation, TernaryCIM ultimately achieved a macro-level energy efficiency of 136.53 TOPS/W. It supports efficient CIM inference with asymmetric post-training quantization (PTQ) and is backed by comprehensive algorithmic validation.",
       year: "2025",
-      tags: ["Robotics", "ROS", "YOLO"],
+      tags: ["CIM", "Ternary Quantization", "Asymmetric Quantization"],
       image: "/pj1.png",
       links: { demo: "...", code: "...", paper: "..." } 
     },
