@@ -263,7 +263,7 @@ export default function Home() {
               <p className="mt-2 text-white/90 text-lg md:text-2xl leading-relaxed">
                 Specialized in{" "}
                 <Typewriter
-                  words={["Statistics", "Generative Models", "Reinforcement Learning"]}
+                  words={["VLM Acceleration", "Computing-In-Memory", "Heterogeneous Computing Arch"]}
                   className="text-white font-medium"
                 />
                 .
