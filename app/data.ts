@@ -1,14 +1,14 @@
 export const DATA = {
   hero: {
-    title: "Hi! I'm Lando.", 
+    title: "Hi! I'm ZhuoJun Han.", 
     subtitle: "Student and Researcher at Fudan University (FDU).",
-    desc: "Specialized in Statistics, Generative Models, Reinforcement Learning.",
+    desc: "Specialized in VLM Acceleration, Computing-In-Memory, Heterogeneous Computing Arch.",
     bgImage: "/hero-bg.webp", 
   },
   profile: {
     name: "Zhuojun Han (Lando)",
     role: "AI Chips Researcher / Undergraduate Student",
-    bio: "Hi everyone, I am Zhuojun Han, pursuing my undergraduate degree in Fudan Univerisity (FDU) majoring microelectronic engineering, I am currently a researcher focusing on AI accelerators (Computing-in-Memory Circuit / Heterogeneous Computing Arch) and AI infrastructure (Distributed Training / Efficient Inference) under Prof Haozhe Zhu's guidance in State Key Laboratory of Integrated Chips and Systems (SKLICS) in Fudan University. I have studied Programming Massively Parallel Processors (PMPP), General-Purpose GPU Programming and Architecture (GPGPA), Computer Architecture and SoC Design, Introduction to AI Chip Design, Pattern Recognition and Machine Learning (PRML), Principles of Memory Systems, Advanced IC Packaging courses and get all of them A, besides I am also self-motivated to actively follow frontier AI research and industry developments to stay current with state-of-the-art methods, which laid a solid foundation for my further research.Outside of research, I enjoy F1, soccer and listening to music.",
+    bio: "Hi everyone, I am Zhuojun Han, pursuing my undergraduate degree in Fudan Univerisity (FDU) majoring microelectronic engineering, I am currently a researcher focusing on AI accelerators (Computing-in-Memory Circuit / Heterogeneous Computing Arch) and AI infrastructure (Distributed Training / Efficient Inference) under Prof Haozhe Zhu's guidance in State Key Laboratory of Integrated Chips and Systems (SKLICS) in Fudan University. I have studied Programming Massively Parallel Processors (PMPP), General-Purpose GPU Programming and Architecture (GPGPA), Computer Architecture and SoC Design, Introduction to AI Chip Design, Pattern Recognition and Machine Learning (PRML), Principles of Memory Systems, Advanced IC Packaging courses and get all of them A, besides I also actively follow frontier AI research and industry developments to stay current with state-of-the-art methods, which laid a solid foundation for my further research.",
     avatar: "/avatar.jpg", 
     social: {
       github: "https://github.com/LArielOzjH",
