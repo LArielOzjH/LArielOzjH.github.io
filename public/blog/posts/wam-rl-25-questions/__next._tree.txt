@@ -5,4 +5,4 @@
 :HL["/blog/_next/static/media/c825fd02acae0153-s.p.1q3-y3vmyf3p6.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["/blog/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["/blog/_next/static/media/dc0c65e819e3bb6c-s.p.1d4mg4yt567i3.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"posts","param":null,"prefetchHints":0,"slots":{"children":{"name":"slug","param":{"type":"d","key":"evaluation-latency-ledger","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}},"staleTime":300,"buildId":"aMeCzw__8eo01NFRoWAv1"}
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"posts","param":null,"prefetchHints":0,"slots":{"children":{"name":"slug","param":{"type":"d","key":"wam-rl-25-questions","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}},"staleTime":300,"buildId":"aMeCzw__8eo01NFRoWAv1"}
