@@ -13,7 +13,8 @@ except ModuleNotFoundError:
 
 DEFAULT_URL = (
     "https://export.arxiv.org/api/query?search_query="
-    "cat:cs.LG+OR+cat:cs.AI+OR+cat:cs.DC+OR+cat:cs.AR+OR+cat:cs.PF"
+    "(cat:cs.LG+OR+cat:cs.AI+OR+cat:cs.DC+OR+cat:cs.AR+OR+cat:cs.PF+OR+"
+    "all:%22Design+Automation+Conference%22+OR+all:%22ASP-DAC%22+OR+all:%22ICCAD%22+OR+all:%22ISCA%22+OR+all:%22HPCA%22)"
     "&start=0&max_results=100&sortBy=submittedDate&sortOrder=descending"
 )
 ROOT = Path(__file__).parents[2]
@@ -45,7 +46,11 @@ def parse_atom(xml_text: str) -> list[dict]:
         for author in _children(entry, "author"):
             affiliations = [" ".join((item.text or "").split()) for item in author if item.tag.rsplit("}", 1)[-1] == "affiliation"]
             authors.append({"name": _text(author, "name"), "affiliation": "; ".join(filter(None, affiliations))})
-        links = {link.attrib.get("title", link.attrib.get("rel", "")): link.attrib.get("href", "") for link in _children(entry, "link")}
+        link_nodes = _children(entry, "link")
+        links = {link.attrib.get("title", link.attrib.get("rel", "")): link.attrib.get("href", "") for link in link_nodes}
+        doi = links.get("doi", "") or next((link.attrib.get("href", "") for link in link_nodes if "doi.org/" in link.attrib.get("href", "")), "")
+        comment = _text(entry, "comment")
+        journal_ref = _text(entry, "journal_ref")
         entries.append({
             "id": identifier,
             "title": _text(entry, "title"),
@@ -53,10 +58,20 @@ def parse_atom(xml_text: str) -> list[dict]:
             "authors": authors,
             "published": _text(entry, "published"),
             "updated": _text(entry, "updated"),
+            "comment": comment,
+            "journalRef": journal_ref,
+            "venue": infer_venue(comment, journal_ref),
+            "doi": doi,
             "arxivUrl": links.get("alternate", f"https://arxiv.org/abs/{identifier}"),
             "pdfUrl": links.get("pdf", f"https://arxiv.org/pdf/{identifier}"),
         })
     return entries
+
+
+def infer_venue(comment: str, journal_ref: str) -> str:
+    text = " ".join(value for value in (comment, journal_ref) if value)
+    match = re.search(r"(?i)\b(DAC|ASP-DAC|DATE|ICCAD|ISCA|HPCA|ISSCC|ICLR|ICML|ACL|EMNLP|NeurIPS|CVPR|ECCV|MICRO|MLSys)\b[^,;]*", text)
+    return match.group(0).strip() if match else ""
 
 
 def fetch_arxiv(url: str = DEFAULT_URL, opener=urllib.request.urlopen) -> str:
@@ -95,6 +110,8 @@ def build_snapshot(entries: list[dict], now: datetime) -> dict:
             "tags": make_tags(category, category["matched_terms"]),
             "published": entry["published"][:10],
             "updated": entry.get("updated", "")[:10],
+            "venue": entry.get("venue", ""),
+            "doi": entry.get("doi", ""),
             "arxivUrl": entry["arxivUrl"],
             "pdfUrl": entry["pdfUrl"],
             "source": "arxiv",

@@ -1,7 +1,7 @@
 # Daily paper digest
 
 The digest is a static page at `/blog/papers/`. It is deliberately selective:
-an arXiv entry must match one of the eight systems/inference topics and include
+an arXiv entry must match one of the seven systems/inference topics and include
 at least one institution from `scripts/papers/institutions.json`.
 
 The scheduled GitHub Actions job in `my-portfolio` runs at 02:15 UTC, which is

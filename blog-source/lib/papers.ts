@@ -2,9 +2,8 @@ import paperSnapshot from "@/data/papers/papers.json";
 
 export const PAPER_CATEGORIES = [
   { id: "quantization", name: "Quantization" },
-  { id: "pruning-sparsity", name: "Pruning & Sparsity" },
-  { id: "operator-dsl-compiler", name: "Operator & DSL & Compiler" },
-  { id: "distributed-inference", name: "Distributed Inference" },
+  { id: "model-compression", name: "Model Compression" },
+  { id: "operators-kernels-compilers", name: "Operators, Kernels & Compilers" },
   { id: "serving-systems", name: "Serving Systems" },
   { id: "speculative-decoding", name: "Speculative Decoding" },
   { id: "long-context-efficient-attention", name: "Long Context & Efficient Attention" },
@@ -23,6 +22,8 @@ export type Paper = {
   tags: string[];
   published: string;
   updated?: string;
+  venue?: string;
+  doi?: string;
   arxivUrl: string;
   pdfUrl: string;
   source: "arxiv";

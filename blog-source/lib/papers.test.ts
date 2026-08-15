@@ -2,10 +2,11 @@ import { describe, expect, it } from "vitest";
 import { PAPER_CATEGORIES, getPaperDigest } from "./papers";
 
 describe("paper digest", () => {
-  it("loads a digest with all eight fixed categories", () => {
+  it("loads a digest with seven fixed categories", () => {
     const digest = getPaperDigest();
-    expect(PAPER_CATEGORIES).toHaveLength(8);
-    expect(digest.categories).toHaveLength(8);
+    expect(PAPER_CATEGORIES).toHaveLength(7);
+    expect(digest.categories).toHaveLength(7);
+    expect(PAPER_CATEGORIES.some((category) => category.id === "distributed-inference")).toBe(false);
     expect(digest.categories.map((category) => category.name)).toEqual(PAPER_CATEGORIES.map((category) => category.name));
   });
 

@@ -26,11 +26,18 @@ class PaperRulesTests(unittest.TestCase):
         self.assertEqual(result[0]["id"], "quantization")
         self.assertIn("quantization", result[0]["matched_terms"])
 
+    def test_model_merging_is_compression_but_unrelated_merging_is_not(self):
+        categories = [{"id": "model-compression", "name": "Model Compression", "keywords": ["model merging", "token merging"]}]
+        self.assertTrue(classify_paper("Model merging for LLMs", "We merge model parameters.", categories))
+        self.assertFalse(classify_paper("Merging traffic routes", "A transportation study.", categories))
+
     def test_tags_are_exactly_five_and_tldr_is_compact(self):
         category = {"id": "quantization", "name": "Quantization", "tags": ["LLM Inference", "Model Compression"]}
         tags = make_tags(category, ["int4"])
         self.assertEqual(len(tags), 5)
         self.assertEqual(len(set(tags)), 5)
+        self.assertNotIn("LLM Inference", tags)
+        self.assertIn("INT4", tags)
         tldr = make_tldr("  We propose a fast method. It improves latency.  " + "x" * 500, max_chars=80)
         self.assertLessEqual(len(tldr), 80)
         self.assertTrue(tldr.endswith("…"))

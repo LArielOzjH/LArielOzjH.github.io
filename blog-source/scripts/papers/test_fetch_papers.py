@@ -4,13 +4,17 @@ from datetime import datetime, timezone
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-from scripts.papers.fetch_papers import build_snapshot, parse_atom, write_snapshot
+from scripts.papers.fetch_papers import build_snapshot, infer_venue, parse_atom, write_snapshot
 
 
 FIXTURE = Path(__file__).parent / "fixtures" / "arxiv-sample.xml"
 
 
 class FetchPaperTests(unittest.TestCase):
+    def test_infer_venue_from_arxiv_comment_or_journal_reference(self):
+        self.assertEqual(infer_venue("Accepted at DAC 2026", ""), "DAC 2026")
+        self.assertEqual(infer_venue("", "Proceedings of ISCA 2025"), "ISCA 2025")
+
     def test_parse_atom_normalizes_versions_and_extracts_affiliations(self):
         entries = parse_atom(FIXTURE.read_text())
         self.assertEqual(len(entries), 2)
