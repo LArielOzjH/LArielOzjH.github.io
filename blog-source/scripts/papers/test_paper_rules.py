@@ -1,6 +1,6 @@
 import unittest
 
-from scripts.papers.paper_rules import allowed_institution, classify_paper, make_tags, make_tldr
+from scripts.papers.paper_rules import allowed_institution, infer_institutions, classify_paper, make_tags, make_tldr
 
 
 class PaperRulesTests(unittest.TestCase):
@@ -14,6 +14,11 @@ class PaperRulesTests(unittest.TestCase):
     def test_unknown_affiliation_is_rejected(self):
         allowlist = {"organizations": [{"name": "MIT", "aliases": ["massachusetts institute of technology"]}]}
         self.assertEqual(allowed_institution(["Some University"], allowlist), [])
+
+    def test_infers_only_explicit_allowlisted_institutions_from_paper_text(self):
+        allowlist = {"organizations": [{"name": "NVIDIA", "aliases": ["nvidia"]}]}
+        self.assertEqual(infer_institutions("NVIDIA kernel optimization", "We evaluate on NVIDIA GPUs.", allowlist), ["NVIDIA"])
+        self.assertEqual(infer_institutions("A fast kernel", "We evaluate on unknown hardware.", allowlist), [])
 
     def test_classification_returns_highest_scoring_category_and_terms(self):
         categories = [{"id": "quantization", "name": "Quantization", "keywords": ["quantization", "int4"]}]

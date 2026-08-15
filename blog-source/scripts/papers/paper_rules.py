@@ -18,6 +18,11 @@ def allowed_institution(affiliations: list[str], allowlist: dict) -> list[str]:
     return matches
 
 
+def infer_institutions(title: str, abstract: str, allowlist: dict) -> list[str]:
+    """Use only explicit organization mentions when Atom lacks affiliations."""
+    return allowed_institution([f"{title} {abstract}"], allowlist)
+
+
 def classify_paper(title: str, abstract: str, categories: list[dict]) -> list[dict]:
     haystack = normalize_text(f"{title} {abstract}")
     scored = []

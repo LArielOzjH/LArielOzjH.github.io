@@ -7,9 +7,9 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 try:
-    from scripts.papers.paper_rules import allowed_institution, classify_paper, load_policy, make_tags, make_tldr
+    from scripts.papers.paper_rules import allowed_institution, classify_paper, infer_institutions, load_policy, make_tags, make_tldr
 except ModuleNotFoundError:
-    from paper_rules import allowed_institution, classify_paper, load_policy, make_tags, make_tldr
+    from paper_rules import allowed_institution, classify_paper, infer_institutions, load_policy, make_tags, make_tldr
 
 DEFAULT_URL = (
     "https://export.arxiv.org/api/query?search_query="
@@ -77,6 +77,8 @@ def build_snapshot(entries: list[dict], now: datetime) -> dict:
     for entry in newest.values():
         affiliations = [author["affiliation"] for author in entry["authors"] if author.get("affiliation")]
         organizations = allowed_institution(affiliations, allowlist)
+        if not organizations:
+            organizations = infer_institutions(entry["title"], entry["abstract"], allowlist)
         classification = classify_paper(entry["title"], entry["abstract"], categories)
         if not organizations or not classification:
             continue
