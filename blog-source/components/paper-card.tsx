@@ -6,7 +6,7 @@ export function PaperCard({ paper }: { paper: Paper }) {
     <article className="paper-card">
       <h3 className="paper-card-title">{paper.title}</h3>
       <p className="paper-card-authors">{formatAuthors(paper.authors)}</p>
-      <p className="paper-card-orgs">{paper.organizations.join(" · ")}</p>
+      {paper.organizations.length ? <p className="paper-card-orgs">{paper.organizations.join(" · ")}</p> : null}
       {paper.venue ? <p className="paper-card-venue">{paper.venue}</p> : null}
       <div className="paper-card-tldr">
         <span>TL;DR</span>

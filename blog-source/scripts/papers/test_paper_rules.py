@@ -1,9 +1,14 @@
 import unittest
 
-from scripts.papers.paper_rules import allowed_institution, infer_institutions, classify_paper, make_tags, make_tldr
+from scripts.papers.paper_rules import allowed_institution, infer_institutions, classify_paper, load_policy, make_tags, make_tldr
 
 
 class PaperRulesTests(unittest.TestCase):
+    def test_title_match_outranks_abstract_match_for_category_selection(self):
+        categories, _ = load_policy()
+        matches = classify_paper("DARTree: Speculative Diffusion Decoding with Autoregressive Draft Trees", "We use best-first pruning to select the verification tree.", categories)
+        self.assertEqual(matches[0]["id"], "speculative-decoding")
+
     def test_allowlist_is_case_insensitive_and_returns_canonical_matches(self):
         allowlist = {"organizations": [{"name": "NVIDIA", "aliases": ["nvidia corporation"]}]}
         self.assertEqual(

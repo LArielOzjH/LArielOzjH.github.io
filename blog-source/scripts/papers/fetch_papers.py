@@ -3,7 +3,7 @@ import json
 import re
 import urllib.request
 import xml.etree.ElementTree as ET
-from datetime import datetime, timezone
+from datetime import date, datetime, time, timedelta, timezone
 from pathlib import Path
 
 try:
@@ -11,13 +11,29 @@ try:
 except ModuleNotFoundError:
     from paper_rules import allowed_institution, classify_paper, infer_institutions, load_policy, make_tags, make_tldr
 
-DEFAULT_URL = (
-    "https://export.arxiv.org/api/query?search_query="
-    "(cat:cs.LG+OR+cat:cs.AI+OR+cat:cs.DC+OR+cat:cs.AR+OR+cat:cs.PF+OR+"
-    "all:%22Design+Automation+Conference%22+OR+all:%22ASP-DAC%22+OR+all:%22ICCAD%22+OR+all:%22ISCA%22+OR+all:%22HPCA%22)"
-    "&start=0&max_results=100&sortBy=submittedDate&sortOrder=descending"
-)
 ROOT = Path(__file__).parents[2]
+ARXIV_QUERY = (
+    "(cat:cs.LG+OR+cat:cs.AI+OR+cat:cs.DC+OR+cat:cs.AR+OR+cat:cs.PF+OR+"
+    "all:%22Design+Automation+Conference%22+OR+all:%22ASP-DAC%22+OR+all:%22ICCAD%22+OR+"
+    "all:%22ISCA%22+OR+all:%22HPCA%22)"
+)
+
+
+def build_arxiv_url(day: date | None = None, start: int = 0, max_results: int = 100) -> str:
+    """Build a daily query for one UTC calendar day."""
+    utc_day = day or datetime.now(timezone.utc).date()
+    utc_start = datetime.combine(utc_day, time.min, tzinfo=timezone.utc)
+    utc_end = utc_start + timedelta(days=1) - timedelta(minutes=1)
+    range_start = utc_start.strftime("%Y%m%d%H%M")
+    range_end = utc_end.strftime("%Y%m%d%H%M")
+    return (
+        f"https://export.arxiv.org/api/query?search_query={ARXIV_QUERY}+AND+"
+        f"submittedDate:%5B{range_start}+TO+{range_end}%5D"
+        f"&start={start}&max_results={max_results}&sortBy=submittedDate&sortOrder=descending"
+    )
+
+
+DEFAULT_URL = build_arxiv_url()
 
 
 def _text(element: ET.Element, name: str) -> str:
@@ -74,10 +90,23 @@ def infer_venue(comment: str, journal_ref: str) -> str:
     return match.group(0).strip() if match else ""
 
 
-def fetch_arxiv(url: str = DEFAULT_URL, opener=urllib.request.urlopen) -> str:
+def fetch_arxiv(url: str | None = None, opener=urllib.request.urlopen) -> str:
+    url = url or build_arxiv_url()
     request = urllib.request.Request(url, headers={"User-Agent": "LarieloDailyPapers/1.0 (research digest)"})
     with opener(request, timeout=30) as response:
         return response.read().decode("utf-8")
+
+
+def fetch_all_arxiv(day: date | None = None, page_size: int = 100, opener=urllib.request.urlopen) -> list[dict]:
+    """Fetch every result for a day by following arXiv API pages until exhausted."""
+    entries = []
+    start = 0
+    while True:
+        page = parse_atom(fetch_arxiv(build_arxiv_url(day, start=start, max_results=page_size), opener))
+        entries.extend(page)
+        if len(page) < page_size:
+            return entries
+        start += page_size
 
 
 def build_snapshot(entries: list[dict], now: datetime) -> dict:
@@ -95,7 +124,7 @@ def build_snapshot(entries: list[dict], now: datetime) -> dict:
         if not organizations:
             organizations = infer_institutions(entry["title"], entry["abstract"], allowlist)
         classification = classify_paper(entry["title"], entry["abstract"], categories)
-        if not organizations or not classification:
+        if not classification:
             continue
         category = classification[0]
         papers.append({
@@ -137,8 +166,8 @@ def main() -> int:
     parser.add_argument("--output", type=Path, default=ROOT / "data/papers/papers.json")
     args = parser.parse_args()
     try:
-        xml_text = args.fixture.read_text() if args.fixture else fetch_arxiv()
-        snapshot = build_snapshot(parse_atom(xml_text), datetime.now(timezone.utc))
+        entries = parse_atom(args.fixture.read_text()) if args.fixture else fetch_all_arxiv()
+        snapshot = build_snapshot(entries, datetime.now(timezone.utc))
         write_snapshot(snapshot, args.output)
     except Exception as error:
         print(f"paper fetch failed: {error}")

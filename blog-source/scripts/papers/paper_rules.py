@@ -24,13 +24,16 @@ def infer_institutions(title: str, abstract: str, allowlist: dict) -> list[str]:
 
 
 def classify_paper(title: str, abstract: str, categories: list[dict]) -> list[dict]:
-    haystack = normalize_text(f"{title} {abstract}")
+    title_text = normalize_text(title)
+    abstract_text = normalize_text(abstract)
     scored = []
     for category in categories:
-        matched = [keyword for keyword in category["keywords"] if _keyword_in_text(keyword, haystack)]
+        title_matches = [keyword for keyword in category["keywords"] if _keyword_in_text(keyword, title_text)]
+        abstract_matches = [keyword for keyword in category["keywords"] if _keyword_in_text(keyword, abstract_text) and keyword not in title_matches]
+        matched = [*title_matches, *abstract_matches]
         if matched:
-            scored.append({**category, "matched_terms": matched, "score": len(matched)})
-    return sorted(scored, key=lambda item: (-item["score"], item["id"]))
+            scored.append({**category, "matched_terms": matched, "score": len(matched), "title_score": len(title_matches), "abstract_score": len(abstract_matches)})
+    return sorted(scored, key=lambda item: (-bool(item["title_score"]), -item["title_score"], -item["abstract_score"], item["id"]))
 
 
 def make_tags(category: dict, matched_terms: list[str]) -> list[str]:
