@@ -566,7 +566,7 @@ export default function Home() {
 
                 {/* Grid projects */}
                 <div className="grid md:grid-cols-2 gap-6">
-                  {rest.map((proj: any, i: number) => (
+                  {rest.map((proj: (typeof DATA.projects)[number], i: number) => (
                     <motion.article
                       key={i}
                       initial={{ opacity: 0, y: 12 }}

@@ -1,0 +1,21 @@
+---
+title: "Notes on Determinism in Long Inference Pipelines"
+description: "A placeholder research note about random seeds, kernel choices, cache state, and the difference between repeatable software and repeatable observations."
+date: "2025-10-03"
+tags: ["inference", "reproducibility", "systems"]
+featured: false
+draft: false
+---
+
+Determinism is not a single switch. In long inference pipelines, repeatability depends on model code, runtime kernels, batching policy, cache state, and even logging boundaries.
+
+## Layers
+
+- deterministic math
+- deterministic scheduling
+- deterministic input construction
+- deterministic observation
+
+## Local rule
+
+The note should say which layer it is claiming to control. Without that sentence, a reproducibility claim becomes too broad.

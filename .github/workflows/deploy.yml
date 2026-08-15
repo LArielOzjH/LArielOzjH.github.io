@@ -2,6 +2,8 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: ["main"]
+  schedule:
+    - cron: "15 2 * * *"
   workflow_dispatch:
 permissions:
   contents: read
@@ -23,6 +25,8 @@ jobs:
           cache: 'npm'
       - name: Install dependencies
         run: npm ci
+      - name: Refresh and build Blog
+        run: bash scripts/build-blog.sh
       - name: Build
         run: npm run build
       - name: Upload artifact

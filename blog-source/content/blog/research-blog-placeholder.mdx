@@ -1,0 +1,209 @@
+---
+title: "A Small Note on Scaling Laws Hardware"
+description: "A long-form placeholder research note for testing typography, sidenotes, code, figures, tables, math, and Chinese/English mixed reading rhythm."
+date: "2026-07-03"
+tags: ["systems", "machine-learning", "notes"]
+cover: "/lighthouse-pink-clouds.jpg"
+featured: true
+draft: false
+---
+
+This placeholder post is intentionally longer than a scaffold page. It gives the layout enough material to test scrolling, active table of contents state, margin notes, mathematical notation, code blocks, mixed Chinese/English typography, figures, tables, and citation-like side comments.
+
+The final blog will mostly hold research notes: paper readings, implementation logs, experiment summaries, small derivations, and the kind of half-formal observations that are useful to revisit later. I want the page to feel closer to a working notebook than a launch announcement: quiet, precise, and durable.
+
+## Why another blog
+
+The goal is not to build a news feed. The goal is to keep durable research notes: small derivations, architecture readings, experiment logs, and paper summaries that still make sense six months later. A good note is compact enough to scan but precise enough to recover the reasoning behind an experiment.
+
+<aside id="note-1" className="margin-note">
+  <span className="note-number">1</span>
+  This numbered margin note should sit near the paragraph it annotates. It is not sticky metadata; it is part of the reading flow.
+</aside>
+
+For example, a paragraph can carry a small reference marker.<sup><a href="#note-1" id="ref-1">1</a></sup> Later this pattern can hold paper links, implementation caveats, reminders about experimental setup, or short comments written while reading.
+
+My own notes usually need to support a few recurring modes:
+
+- Fast summaries of paper claims and assumptions.
+- Reproducible experiment logs with commands, config, and observed failure modes.
+- Short derivations that explain why an equation or scaling argument matters.
+- 中文和英文混排的研究记录，尤其是读论文时顺手写下的判断、怀疑和后续实验计划。
+- Small visual anchors: figures, tables, code fragments, and citations placed close to the paragraphs that use them.
+
+### Reading structure
+
+Long technical writing benefits from explicit landmarks. The table of contents on the left should remain quiet most of the time. As the reader scrolls, only the current section needs to become darker and receive a bullet. That gives orientation without turning the page into a dashboard.
+
+The right side has a different job. It should behave like a margin: notes appear near the paragraph they annotate and move with the article. This is closer to how Thinking Machines uses numbered notes and citations. A sidenote can be short, but it must be close enough that the reader does not lose the thread.
+
+### Mixed-language typography
+
+中文看起来比英文更大，通常不是 CSS `font-size` 写错，而是两套 fallback 字体的视觉高度、字面宽度、baseline 和笔画密度不一致。The better default is to pair a Latin serif with a CJK serif that is designed for long reading, then keep the sans-serif UI separate.
+
+In practice, mixed prose needs small optical corrections. A CJK span can be scaled slightly down and raised by a small relative offset so that Chinese characters sit more naturally next to Latin ascenders and x-height. This is not a semantic distinction; it is a typesetting correction.
+
+## A tiny scaling-law sketch
+
+For a simple scaling-law sketch, we might write
+
+$$
+L(N, D) = L_\infty + aN^{-\alpha} + bD^{-\beta}
+$$
+
+where \(N\) is model size and \(D\) is amount of data. 这不是完整结论，只是用来检查公式排版、行高和中英文混排。The useful part of writing this down is not the equation itself, but the reminder that every term hides an experimental protocol.
+
+<figure>
+  <img src="/dock-blue-railing.jpg" alt="A dock framed by trees and a blue railing." />
+  <figcaption>A quiet structural image used as a figure placeholder. The caption should feel like article text, only slightly smaller.</figcaption>
+</figure>
+
+### Interpreting the terms
+
+Constants matter because they encode how a measurement was made. A note should record conditions explicitly:
+
+- Which data distribution was used?
+- Was the model trained to convergence or stopped at a fixed compute budget?
+- Which optimizer, batch size, precision, and schedule were used?
+- Were measurements taken before or after compilation warmup?
+- Did wall-clock time include data loading, checkpointing, and evaluation?
+
+<aside id="note-2" className="margin-note">
+  <span className="note-number">2</span>
+  The same scaling-law equation can describe experiments that feel completely different in practice because memory traffic or cross-device communication dominates wall-clock time.
+</aside>
+
+Two runs can share a clean curve and still feel completely different in practice.<sup><a href="#note-2" id="ref-2">2</a></sup> One may be FLOP-bound and easy to scale; another may spend most of its time on memory movement, kernel launch overhead, or collective communication.
+
+### What should be written down
+
+When the note is about hardware or training systems, I want the experimental record to preserve at least three layers of context:
+
+1. The mathematical claim or performance question.
+2. The implementation path used to test it.
+3. The operational detail that might invalidate an overly clean interpretation.
+
+That ordering matters. If the observation starts with a single number, it is easy to forget what the number means. If it starts with the question, the number has a place to land.
+
+## Experiment log format
+
+Code blocks should be readable enough to use as lab records. The mono font should be large enough that commands can be copied without zooming, and the copy button should stay present but visually quiet.
+
+```python
+from dataclasses import dataclass
+
+
+@dataclass(frozen=True)
+class RunSummary:
+    tokens: int
+    seconds: float
+    loss: float
+
+    @property
+    def tokens_per_second(self) -> float:
+        return self.tokens / self.seconds
+
+
+def compare_runs(baseline: RunSummary, candidate: RunSummary) -> str:
+    speedup = candidate.tokens_per_second / baseline.tokens_per_second
+    delta_loss = candidate.loss - baseline.loss
+    return f"{speedup:.2f}x throughput, {delta_loss:+.4f} loss"
+```
+
+### Small tables
+
+Tables should remain compact. They are best used for comparison rather than decoration.
+
+| Component | Question | Typical note |
+| --- | --- | --- |
+| Compute | Is the workload FLOP-bound? | Check utilization and kernel mix. |
+| Memory | Does activation movement dominate? | Watch HBM bandwidth and rematerialization. |
+| Network | Does sharding add stalls? | Compare all-reduce time with matmul time. |
+| Input pipeline | Is the accelerator waiting? | Separate host preprocessing from device work. |
+
+### Numbered protocol
+
+For experiment-heavy posts, numbered protocol is clearer than bullets when order matters:
+
+1. Define the baseline configuration: exact commit, checkpoint, dataset slice, and hardware.
+2. Change one variable at a time, even if interactions between variables seem obvious.
+3. Save raw logs before compressing the result into a table or figure.
+4. Write a short interpretation while the run is still fresh.
+5. Revisit that interpretation after the next comparison run.
+
+The point is not bureaucracy. The point is preventing a common failure mode: remembering the conclusion while forgetting the path that made the conclusion believable.
+
+<figure>
+  <img src="/surfboard-birds.jpg" alt="A person on a surfboard in water with birds in the sky." />
+  <figcaption>A second figure for testing long-form rhythm: image, caption, paragraph, and following section should create a calm reading cadence.</figcaption>
+</figure>
+
+## Failure notes
+
+Failure notes deserve their own section. In research engineering, negative results often become the most useful artifact because they constrain the next experiment. A good failure note includes symptom, suspected cause, and the smallest test that could falsify the suspicion.
+
+Useful failure records often include small details:
+
+- If a training run diverges, record the first unstable metric and the step where it appears.
+- If throughput drops, separate dataloader time, kernel time, and communication time.
+- If a result improves, check whether the improvement survives a second seed or a smaller sanity run.
+- If a cache or compilation artifact changes the result, write down how the run was warmed up.
+
+### A local debugging pattern
+
+When debugging a system result, I usually want the note to keep two voices separate. The first voice states what happened. The second voice states what I think it means. 混在一起之后，后面回看很容易把猜测误认为事实。
+
+For example:
+
+1. Observation: throughput dropped from 410k tokens/s to 355k tokens/s after changing sequence packing.
+2. Hypothesis: padding distribution changed enough to alter attention kernel occupancy.
+3. Test: replay the same batch shapes with the old packing path.
+4. Result: if the replay remains slow, investigate kernels; if it recovers, investigate data path.
+
+This small structure prevents a note from becoming a pile of impressions.
+
+## Figure placement
+
+Images should be close to the text that uses them. A figure that arrives too early feels decorative; a figure that arrives too late forces the reader to hold context in memory. For this site, image placement should be conservative: one image near the opening, one near a method or result, one near a closing reflection if it helps the page breathe.
+
+<aside id="note-3" className="margin-note">
+  <span className="note-number">3</span>
+  Future posts can use the same figure structure for screenshots, plots, architecture diagrams, or photos from a lab notebook.
+</aside>
+
+The margin note next to this paragraph is deliberately mundane.<sup><a href="#note-3" id="ref-3">3</a></sup> It tests whether sidenotes keep their position when figures and captions interrupt the main flow.
+
+<figure>
+  <img src="/building-stars.jpg" alt="A building surrounded by trees under a starry sky." />
+  <figcaption>A final placeholder figure with a quieter night image. It checks whether captions remain legible across different visual densities.</figcaption>
+</figure>
+
+### Third-level heading
+
+Sometimes a section needs one more layer, but the table of contents does not need to expose every small local heading. A third-level heading should create rhythm inside the prose without becoming a top-level landmark. The reader should be able to skim the article by second-level sections and then use third-level headings only when already inside a section.
+
+## Citation and source discipline
+
+Not every note needs formal citations, but every technical claim should make it possible to recover the source. When a claim comes from a paper, the note should link the paper. When a claim comes from an experiment, the note should link config, log, or script. When a claim is personal interpretation, the text should say so.
+
+<aside id="note-4" className="margin-note">
+  <span className="note-number">4</span>
+  A future version could expose this as a small MDX component, but native HTML keeps the current writing format portable.
+</aside>
+
+This is also where margin notes help. They can hold citation context, short caveats, or reminders without interrupting the main argument.<sup><a href="#note-4" id="ref-4">4</a></sup> If a side note grows too long, that is usually a sign the main text needs another paragraph instead.
+
+### Source checklist
+
+Before publishing a note, I want to check:
+
+1. Are all quoted numbers tied to a source, run, or derivation?
+2. Are assumptions separated from observations?
+3. Are links placed near the claims they support?
+4. Would I understand this note after a month away from the project?
+
+## Closing thoughts
+
+This placeholder can be replaced with a real post later. For now it verifies the content pipeline, article layout, syntax blocks, math rendering, active table of contents, copyable code blocks, numbered margin notes, figures, captions, tables, and mixed-language typography.
+
+The ideal finished site should not feel like a template. It should feel like a quiet research desk: enough structure to recover ideas, enough whitespace to keep reading, and enough typographic care that English and 中文 can sit together without calling attention to the machinery underneath.

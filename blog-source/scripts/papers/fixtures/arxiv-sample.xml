@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:arxiv="http://arxiv.org/schemas/atom">
+  <entry>
+    <id>http://arxiv.org/abs/2608.12345v1</id>
+    <updated>2026-08-14T12:00:00Z</updated>
+    <published>2026-08-14T10:00:00Z</published>
+    <title>Fast INT4 Quantization for LLM Serving</title>
+    <summary>We propose an efficient quantization method for language model serving. Our method reduces latency while preserving accuracy.</summary>
+    <author><name>Ada Researcher</name><arxiv:affiliation>NVIDIA Research</arxiv:affiliation></author>
+    <author><name>Lin Engineer</name><arxiv:affiliation>Unknown Startup</arxiv:affiliation></author>
+    <link rel="alternate" href="http://arxiv.org/abs/2608.12345v1" />
+    <link title="pdf" href="http://arxiv.org/pdf/2608.12345v1" />
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2608.12345v2</id>
+    <updated>2026-08-14T13:00:00Z</updated>
+    <published>2026-08-14T10:00:00Z</published>
+    <title>Fast INT4 Quantization for LLM Serving</title>
+    <summary>Updated version.</summary>
+    <author><name>Ada Researcher</name><arxiv:affiliation>NVIDIA Research</arxiv:affiliation></author>
+    <link rel="alternate" href="http://arxiv.org/abs/2608.12345v2" />
+    <link title="pdf" href="http://arxiv.org/pdf/2608.12345v2" />
+  </entry>
+</feed>

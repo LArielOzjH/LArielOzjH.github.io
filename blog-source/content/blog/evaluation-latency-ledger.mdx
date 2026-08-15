@@ -1,0 +1,22 @@
+---
+title: "A Latency Ledger for Evaluation Runs"
+description: "Notes on separating model latency, orchestration latency, and measurement overhead when evaluation results look cleaner than the system that produced them."
+date: "2026-05-07"
+tags: ["evaluation", "latency", "inference"]
+featured: false
+draft: false
+---
+
+Evaluation runs produce numbers that look precise, but the measurement path often contains enough orchestration noise to hide the real system behavior.
+
+## Ledger format
+
+I want each run to keep separate rows for model execution, host-side scheduling, queueing, data loading, and scoring.
+
+### Why it helps
+
+If latency improves, the ledger says where it improved. If quality changes, the ledger keeps the measurement protocol close enough to audit.
+
+## Notes
+
+This is placeholder content for homepage layout testing.

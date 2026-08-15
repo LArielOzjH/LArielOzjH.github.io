@@ -1,0 +1,24 @@
+---
+title: "Collectives at Small Batch Sizes"
+description: "A short systems note on why communication overhead can dominate small-batch experiments even when the large-batch version looks compute-bound."
+date: "2025-12-12"
+tags: ["distributed", "hardware", "experiments"]
+featured: false
+draft: false
+---
+
+Small batches are useful for debugging, but they can distort the shape of a distributed training profile.
+
+## Observation
+
+When matmuls shrink, fixed collective overhead becomes easier to see. A debug run can therefore overstate the communication problem or hide the optimization that matters at scale.
+
+## Protocol
+
+1. keep one trace at the target batch size
+2. keep one trace at the debug batch size
+3. write down which conclusions survive both
+
+## Closing
+
+This placeholder keeps a shorter title in the homepage list.

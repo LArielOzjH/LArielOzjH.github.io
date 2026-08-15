@@ -1,0 +1,32 @@
+{
+  "lastUpdated": "2026-08-15T12:22:39.932300+00:00",
+  "source": "arxiv",
+  "papers": [
+    {
+      "id": "2608.12345",
+      "title": "Fast INT4 Quantization for LLM Serving",
+      "authors": [
+        "Ada Researcher"
+      ],
+      "organizations": [
+        "NVIDIA"
+      ],
+      "abstract": "Updated version.",
+      "tldr": "updated version.",
+      "category": "Quantization",
+      "categoryId": "quantization",
+      "tags": [
+        "LLM Inference",
+        "Model Compression",
+        "Low Precision",
+        "Quantization",
+        "Int4"
+      ],
+      "published": "2026-08-14",
+      "updated": "2026-08-14",
+      "arxivUrl": "http://arxiv.org/abs/2608.12345v2",
+      "pdfUrl": "http://arxiv.org/pdf/2608.12345v2",
+      "source": "arxiv"
+    }
+  ]
+}

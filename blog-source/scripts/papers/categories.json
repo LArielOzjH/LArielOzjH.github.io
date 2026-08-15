@@ -1,0 +1,10 @@
+[
+  {"id":"quantization","name":"Quantization","keywords":["quantization","quantized","int4","int8","fp8","mixed precision","weight-only"],"tags":["LLM Inference","Model Compression","Low Precision"]},
+  {"id":"pruning-sparsity","name":"Pruning & Sparsity","keywords":["pruning","sparsity","sparse","sparsification","structured pruning","mixture of experts"],"tags":["Model Compression","Sparse Models","Efficiency"]},
+  {"id":"operator-dsl-compiler","name":"Operator & DSL & Compiler","keywords":["operator fusion","dsl","compiler","kernel","code generation","cuda","triton","mlir"],"tags":["Compilers","Kernels","Hardware Software"]},
+  {"id":"distributed-inference","name":"Distributed Inference","keywords":["distributed inference","tensor parallel","pipeline parallel","expert parallel","all-reduce","collective communication"],"tags":["Distributed Systems","Parallelism","LLM Inference"]},
+  {"id":"serving-systems","name":"Serving Systems","keywords":["model serving","inference serving","serving system","request batching","prefill","continuous batching","autoscaling"],"tags":["Serving","Systems","LLM Inference"]},
+  {"id":"speculative-decoding","name":"Speculative Decoding","keywords":["speculative decoding","draft model","draft-and-verify","early exit decoding"],"tags":["Decoding","LLM Inference","Latency"]},
+  {"id":"long-context-efficient-attention","name":"Long Context & Efficient Attention","keywords":["long context","efficient attention","linear attention","sparse attention","flash attention","kv cache","context window"],"tags":["Attention","Long Context","Memory Efficiency"]},
+  {"id":"edge-on-device-hardware","name":"Edge, On-device & Hardware","keywords":["on-device","on device","edge inference","mobile inference","accelerator","heterogeneous computing","chiplet","hardware accelerator"],"tags":["Edge AI","Hardware","On-device"]}
+]

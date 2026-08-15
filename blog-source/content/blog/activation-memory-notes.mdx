@@ -1,0 +1,24 @@
+---
+title: "Activation Memory Is a Scheduling Problem"
+description: "A compact note on rematerialization, tensor lifetimes, and why memory pressure often appears as an execution-order problem rather than a capacity problem."
+date: "2026-06-18"
+tags: ["systems", "memory", "training"]
+featured: false
+draft: false
+---
+
+This placeholder note exists to test the blog index rhythm with a medium-length title.
+
+## Working claim
+
+Activation memory is rarely only about storing fewer tensors. More often, the useful question is when a tensor becomes live, how long it remains live, and whether recomputing it changes the critical path.
+
+### Small checklist
+
+- record peak memory before and after rematerialization
+- compare step time, not only allocation size
+- inspect whether communication overlaps useful compute
+
+## Closing
+
+The final version should include traces, diagrams, and a small table of scheduling variants.
