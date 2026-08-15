@@ -11,11 +11,8 @@ describe("paper digest", () => {
 
   it("preserves card fields and the five-tag invariant", () => {
     const digest = getPaperDigest();
-    const paper = digest.categories.flatMap((category) => category.papers)[0];
-    expect(paper.title).toContain("Quantization");
-    expect(paper.authors).toContain("Ada Researcher");
-    expect(paper.organizations).toContain("NVIDIA");
-    expect(paper.tldr).toBeTruthy();
-    expect(paper.tags).toHaveLength(5);
+    const papers = digest.categories.flatMap((category) => category.papers);
+    expect(papers.length).toBeGreaterThan(0);
+    expect(papers.every((paper) => paper.title && paper.authors.length && paper.organizations.length && paper.tldr && paper.tags.length === 5)).toBe(true);
   });
 });
