@@ -53,8 +53,8 @@ The category rail is a navigation index, not a row of rounded chips. The active 
 
 - An empty query shows the active category.
 - A non-empty query switches the heading to `Search results` and ranks matches with MiniSearch.
-- The active category remains a live search filter. `All` searches the complete library; a topical category searches only that category.
-- Clearing the field returns to the active category without losing the selection.
+- Typing the first non-empty query switches the active category to `All`, so search covers the complete accumulated library by default.
+- Selecting a topical category clears the query and replaces the list with that category; clearing the field after a search keeps `All` selected.
 - No-result copy states that no title, abstract, author, institution, venue, category, or tag matched and suggests shortening the query.
 - Search runs entirely in the browser and does not require a service or network request after page load.
 

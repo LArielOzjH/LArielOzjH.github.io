@@ -14,6 +14,9 @@
 # testing
 /coverage
 
+# local git worktrees
+/.worktrees/
+
 # next.js
 /.next/
 **/.next/
