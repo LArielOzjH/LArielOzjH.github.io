@@ -18,6 +18,14 @@ timestamp is the same or newer. An empty day preserves the existing cumulative
 snapshot instead of replacing it with an empty library. The paper page searches
 this static snapshot client-side with MiniSearch.
 
+Author affiliations are enriched per selected paper from arXiv's generated
+HTML page (`arxiv.org/html/<id>`): explicit `ltx_role_affiliation` blocks are
+preferred, institution-like lines inside `ltx_personname` are the fallback,
+and deterministic cleaning drops emails, addresses, LaTeXML remnants, and
+footnote junk. Papers without an HTML version (non-LaTeX submissions) fall
+back to explicit organization mentions in the title/abstract, else show no
+organization line. Fixture builds skip the network entirely.
+
 The first version uses a deterministic abstract-derived TL;DR. It does not
 call an LLM API. To adjust selection, edit the two JSON policy files and run:
 

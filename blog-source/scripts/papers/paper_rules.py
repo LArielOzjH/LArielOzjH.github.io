@@ -1,8 +1,15 @@
 import json
 import re
+from html.parser import HTMLParser
 from pathlib import Path
 
 ROOT = Path(__file__).parent
+
+VOID_TAGS = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr"}
+INSTITUTION_HINT = re.compile(r"(?i)\b(universit|institut|laborator|college|academ|school of|center|centre|corporation|research|technolog|polytech)")
+JUNK_HINT = re.compile(r"(?i)https?://|www\.|equal contribution|corresponding author|these authors|work (?:was )?done|,\s*,")
+DEPT_PREFIX = re.compile(r"(?i)^(dept\.?|department|school|faculty|college|division) of\b")
+CORE_INSTITUTION = re.compile(r"(?i)(universit|institute|academy|corporation|company|inc\.)")
 
 
 def normalize_text(value: str) -> str:
@@ -21,6 +28,114 @@ def allowed_institution(affiliations: list[str], allowlist: dict) -> list[str]:
 def infer_institutions(title: str, abstract: str, allowlist: dict) -> list[str]:
     """Use only explicit organization mentions when Atom lacks affiliations."""
     return allowed_institution([f"{title} {abstract}"], allowlist)
+
+
+class _ArxivAuthorsParser(HTMLParser):
+    """Collect affiliation and author-name text blocks from arXiv LaTeXML HTML."""
+
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.affiliations: list[str] = []
+        self.personnames: list[str] = []
+        self._open: list[str] = []
+        self._captures: list[list] = []
+
+    def handle_starttag(self, tag, attrs):
+        if tag in VOID_TAGS:
+            if tag == "br":
+                for capture in self._captures:
+                    capture[2].append("\n")
+            return
+        self._open.append(tag)
+        classes = dict(attrs).get("class") or ""
+        if "ltx_role_affiliation" in classes:
+            self._captures.append([len(self._open), "affiliation", []])
+        elif "ltx_personname" in classes:
+            self._captures.append([len(self._open), "personname", []])
+
+    def handle_endtag(self, tag):
+        if tag in VOID_TAGS:
+            return
+        while self._open:
+            opened = self._open.pop()
+            depth = len(self._open) + 1
+            for capture in list(self._captures):
+                if capture[0] == depth:
+                    self._captures.remove(capture)
+                    text = "".join(capture[2])
+                    (self.affiliations if capture[1] == "affiliation" else self.personnames).append(text)
+            if opened == tag:
+                break
+
+    def handle_data(self, data):
+        for capture in self._captures:
+            capture[2].append(data)
+
+
+def parse_html_affiliations(html: str) -> list[str]:
+    """Extract institution names from an arXiv-generated LaTeXML HTML page.
+
+    Prefers explicit ltx_role_affiliation blocks; falls back to institution-like
+    lines inside ltx_personname when a paper inlines affiliations after names.
+    """
+    parser = _ArxivAuthorsParser()
+    try:
+        parser.feed(html)
+        parser.close()
+    except Exception:
+        return []
+
+    organizations = [org for org in (_first_affiliation_line(block) for block in parser.affiliations) if org]
+    if not organizations:
+        for block in parser.personnames:
+            for line in block.split("\n")[1:]:
+                line = _tidy_affiliation_line(line)
+                if line and "@" not in line and INSTITUTION_HINT.search(line):
+                    organizations.append(line)
+    return clean_affiliations(organizations)
+
+
+def clean_affiliations(values: list[str]) -> list[str]:
+    seen, result = set(), []
+    for value in values:
+        if _is_junk_affiliation_line(value):
+            continue
+        tidy = _tidy_affiliation_line(value)
+        key = tidy.casefold()
+        if key not in seen:
+            seen.add(key)
+            result.append(tidy)
+        if len(result) == 4:
+            break
+    return result
+
+
+def _first_affiliation_line(block: str) -> str:
+    lines = [_tidy_affiliation_line(line) for line in block.split("\n") if not _is_junk_affiliation_line(line)]
+    if not lines:
+        return ""
+    first = lines[0]
+    # A department-only first line usually names its university on the next line.
+    if len(lines) > 1 and DEPT_PREFIX.search(first) and not CORE_INSTITUTION.search(first):
+        return f"{first}, {lines[1]}"[:120]
+    return first
+
+
+def _is_junk_affiliation_line(line: str) -> bool:
+    if "@" in line or JUNK_HINT.search(line):
+        return True
+    tidy = _tidy_affiliation_line(line)
+    return not tidy or not re.search(r"[A-Z一-鿿]", tidy)
+
+
+def _tidy_affiliation_line(line: str) -> str:
+    line = re.sub(r"\\[a-zA-Z]+", " ", line)
+    line = re.sub(r"[†‡§¶∗*]", " ", line)
+    line = " ".join(line.split())
+    line = re.sub(r"(?i)^[\s\d,;.+&^~-]*affiliations?\s*:?", "", line)
+    line = re.sub(r"^[\s\d,;.+&^~-]+", "", line)
+    segments = [segment for segment in (part.strip() for part in line.split(",")) if segment and not segment.isdigit()]
+    return ", ".join(segments).strip(" ,;")[:120]
 
 
 def classify_paper(title: str, abstract: str, categories: list[dict]) -> list[dict]:

@@ -1,15 +1,16 @@
 import argparse
 import json
 import re
+import time as time_module
 import urllib.request
 import xml.etree.ElementTree as ET
 from datetime import date, datetime, time, timedelta, timezone
 from pathlib import Path
 
 try:
-    from scripts.papers.paper_rules import allowed_institution, classify_paper, infer_institutions, load_policy, make_tags, make_tldr
+    from scripts.papers.paper_rules import classify_paper, clean_affiliations, infer_institutions, load_policy, make_tags, make_tldr, parse_html_affiliations
 except ModuleNotFoundError:
-    from paper_rules import allowed_institution, classify_paper, infer_institutions, load_policy, make_tags, make_tldr
+    from paper_rules import classify_paper, clean_affiliations, infer_institutions, load_policy, make_tags, make_tldr, parse_html_affiliations
 
 ROOT = Path(__file__).parents[2]
 ARXIV_QUERY = (
@@ -97,6 +98,20 @@ def fetch_arxiv(url: str | None = None, opener=urllib.request.urlopen) -> str:
         return response.read().decode("utf-8")
 
 
+def fetch_html_affiliations(paper_id: str, opener=urllib.request.urlopen) -> list[str]:
+    """Read affiliations from arXiv's generated HTML page; papers without one yield []."""
+    time_module.sleep(0.3)
+    request = urllib.request.Request(
+        f"https://arxiv.org/html/{paper_id}",
+        headers={"User-Agent": "LarieloDailyPapers/1.0 (research digest)"},
+    )
+    try:
+        with opener(request, timeout=30) as response:
+            return parse_html_affiliations(response.read().decode("utf-8", "replace"))
+    except Exception:
+        return []
+
+
 def fetch_all_arxiv(day: date | None = None, page_size: int = 100, opener=urllib.request.urlopen) -> list[dict]:
     """Fetch every result for a day by following arXiv API pages until exhausted."""
     entries = []
@@ -109,7 +124,7 @@ def fetch_all_arxiv(day: date | None = None, page_size: int = 100, opener=urllib
         start += page_size
 
 
-def build_snapshot(entries: list[dict], now: datetime) -> dict:
+def build_snapshot(entries: list[dict], now: datetime, affiliation_fetcher=None) -> dict:
     categories, allowlist = load_policy()
     newest = {}
     for entry in entries:
@@ -119,14 +134,15 @@ def build_snapshot(entries: list[dict], now: datetime) -> dict:
 
     papers = []
     for entry in newest.values():
-        affiliations = [author["affiliation"] for author in entry["authors"] if author.get("affiliation")]
-        organizations = allowed_institution(affiliations, allowlist)
-        if not organizations:
-            organizations = infer_institutions(entry["title"], entry["abstract"], allowlist)
         classification = classify_paper(entry["title"], entry["abstract"], categories)
         if not classification:
             continue
         category = classification[0]
+        organizations = clean_affiliations([author["affiliation"] for author in entry["authors"] if author.get("affiliation")])
+        if not organizations and affiliation_fetcher:
+            organizations = affiliation_fetcher(entry["id"])
+        if not organizations:
+            organizations = infer_institutions(entry["title"], entry["abstract"], allowlist)
         papers.append({
             "id": entry["id"],
             "title": entry["title"],
@@ -188,7 +204,8 @@ def main() -> int:
     args = parser.parse_args()
     try:
         entries = parse_atom(args.fixture.read_text()) if args.fixture else fetch_all_arxiv()
-        snapshot = build_snapshot(entries, datetime.now(timezone.utc))
+        affiliation_fetcher = None if args.fixture else fetch_html_affiliations
+        snapshot = build_snapshot(entries, datetime.now(timezone.utc), affiliation_fetcher)
         if args.output.exists():
             previous = json.loads(args.output.read_text())
             snapshot = merge_snapshots(previous, snapshot)

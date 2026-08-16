@@ -6,7 +6,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 from unittest.mock import patch
 
-from scripts.papers.fetch_papers import build_arxiv_url, build_snapshot, infer_venue, main, merge_snapshots, parse_atom, write_snapshot
+from scripts.papers.fetch_papers import build_arxiv_url, build_snapshot, fetch_html_affiliations, infer_venue, main, merge_snapshots, parse_atom, write_snapshot
 
 
 FIXTURE = Path(__file__).parent / "fixtures" / "arxiv-sample.xml"
@@ -49,6 +49,38 @@ class FetchPaperTests(unittest.TestCase):
         snapshot = build_snapshot([entry], datetime(2026, 8, 15, tzinfo=timezone.utc))
         self.assertEqual(len(snapshot["papers"]), 1)
         self.assertEqual(snapshot["papers"][0]["organizations"], [])
+
+    def test_build_snapshot_shows_raw_atom_affiliations_without_allowlist_filtering(self):
+        entries = parse_atom(FIXTURE.read_text())
+        snapshot = build_snapshot(entries, datetime(2026, 8, 15, tzinfo=timezone.utc))
+        self.assertEqual(snapshot["papers"][0]["organizations"], ["NVIDIA Research"])
+
+    def test_build_snapshot_asks_html_fetcher_only_when_atom_lacks_affiliations(self):
+        entry = {
+            "id": "2608.99999", "title": "Speculative Decoding for Fast LLM Serving",
+            "abstract": "We verify draft tokens in parallel to reduce latency.",
+            "authors": [{"name": "Independent Researcher", "affiliation": ""}],
+            "published": "2026-08-15T00:00:00Z", "updated": "2026-08-15T00:00:00Z",
+            "arxivUrl": "https://arxiv.org/abs/2608.99999", "pdfUrl": "https://arxiv.org/pdf/2608.99999",
+        }
+        requested = []
+
+        def fetcher(paper_id):
+            requested.append(paper_id)
+            return ["IIT Bombay"]
+
+        snapshot = build_snapshot([entry], datetime(2026, 8, 15, tzinfo=timezone.utc), affiliation_fetcher=fetcher)
+        self.assertEqual(snapshot["papers"][0]["organizations"], ["IIT Bombay"])
+        self.assertEqual(requested, ["2608.99999"])
+
+        entries = parse_atom(FIXTURE.read_text())
+        build_snapshot(entries, datetime(2026, 8, 15, tzinfo=timezone.utc), affiliation_fetcher=lambda paper_id: self.fail("fetcher must not run when Atom has affiliations"))
+
+    def test_fetch_html_affiliations_returns_empty_on_missing_html_page(self):
+        def opener(request, timeout):
+            raise OSError("HTTP Error 404: Not Found")
+
+        self.assertEqual(fetch_html_affiliations("2608.00000", opener=opener), [])
 
     def test_merge_snapshots_appends_new_ids_and_normalizes_versions(self):
         previous = {"lastUpdated": "old", "papers": [{"id": "2608.00001v1", "title": "A", "published": "2026-08-14", "updated": "2026-08-14"}]}

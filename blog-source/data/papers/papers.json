@@ -46,7 +46,11 @@
         "Yuling Xi",
         "Hao Chen"
       ],
-      "organizations": [],
+      "organizations": [
+        "Zhejiang University",
+        "Shanghai Jiao Tong University",
+        "Shanghai Innovation Institute"
+      ],
       "abstract": "Spatial intelligence is becoming a foundation for embodied agents, robotic planning, and multimodal assistants. To improve the spatial reasoning ability of VLM agents, existing work has mainly followed two lines. One line uses post-training methods, such as supervised fine-tuning and reinforcement learning. Another line adopts an agentic paradigm in which the model calls external spatial tools, such as depth estimation and 3D reconstruction tools, to gather intermediate spatial evidence. We study a complementary and underexplored route: Can a frozen VLM agent improve its spatial reasoning through \\textbf{parameter-update-free self-evolution}, without depending on external expert spatial tools at inference time? We present \\textbf{Spatial Memory Agent (SMA)}, an \\textbf{experience-grounded runtime framework} that converts verified spatial experience into reusable transferable lessons. In a verifiable spatial environment, SMA queries the frozen VLM, obtains a predicted answer and reward, and uses \\textbf{verifier-guided reflection} to distill compact transferable lessons from spatial experience. SMA further assigns each lesson a \\textbf{Transfer Reliability Score (TRS)}, which is initialized uniformly and calibrated from later retrieval outcomes as visit evidence of future transfer reliability. During \\textbf{read-only deployment}, SMA retrieves lessons by semantic filter and similarity-TRS combined ranking, allowing the retrieved memory to guide frozen model inference. Across five representative spatial benchmarks and four base VLMs, SMA achieves the highest macro average in every base-model block and the best accuracy among the evaluated methods in most of the 20 evaluations, establishing a practical parameter-update-free path for spatial self-evolution across the evaluated frozen model scales and environments.",
       "tldr": "spatial intelligence is becoming a foundation for embodied agents, robotic planning, and multimodal assistants. to improve the spatial reasoning ability of vlm agents, existing work has mainly followed two lines. one line uses post-training methods, such as supervised…",
       "category": "Speculative Decoding",
@@ -74,7 +78,9 @@
         "Kishan Kumar Upadhyay",
         "Manjesh Kumar Hanawal"
       ],
-      "organizations": [],
+      "organizations": [
+        "MLiONS, Department of IEOR, IIT Bombay"
+      ],
       "abstract": "Large Language Models (LLMs) have achieved remarkable success in natural language understanding and generation, but their deployment is constrained by high computational demands. Deploying smaller LLMs directly on the edge can circumvent this, but with degraded accuracy. Deploying smaller cloud-based big LLMs preserves performance, but at the cost of expensive per-token computation. We present a distributed inference framework, \\our{}, that integrates speculative decoding (SD) across edge and cloud. A compact draft model deployed on the edge generates candidate tokens rapidly, and a large verifier model on the cloud validates these tokens in parallel. Accepted tokens are retained, while only rejections trigger verifier correction, substantially reducing the number of cloud queries. Our plug-and-play design shifts the bulk of computation to the edge, significantly lowers inference time and cloud cost, and preserves the accuracy of the big model without any retraining requirement. Our approach demonstrates a practical path toward scalable, cost-efficient, and accurate deployment of LLMs in real-world environments. Experimental results across multiple Natural Language Processing tasks using SpecBench and CNN/Dailymail datasets demonstrate that \\our{} reduces the cloud model calls by $76\\%$ with zero loss in accuracy as compared to the full model.",
       "tldr": "large language models (llms) have achieved remarkable success in natural language understanding and generation, but their deployment is constrained by high computational demands. deploying smaller llms directly on the edge can circumvent this, but with degraded accuracy.…",
       "category": "Speculative Decoding",
@@ -343,7 +349,10 @@
         "Wenfei Wu",
         "Dongsheng Li"
       ],
-      "organizations": [],
+      "organizations": [
+        "National University of Defense Technology",
+        "Peking University"
+      ],
       "abstract": "Large language model serving faces a critical memory bottleneck: the KV cache grows with sequence length and batch size. PagedAttention uses fixed-size memory blocks to reduce allocator-level fragmentation, but recent KV eviction algorithms operate at a token granularity finer than block-level management. This mismatch causes intra-block fragmentation, leaving a large fraction of allocated KV memory unreclaimable. We present vToken, a lightweight token-level virtualization layer that decouples logical token liveness from physical block placement. vToken maintains a stable logical token view through token-table indirection and realizes physical reclamation by repacking live tokens asynchronously. The design preserves PagedAttention kernels and CUDA Graph compatibility. We implement vToken in vLLM and evaluate it with H2O, Random, and Scissorhands across models. Compared with a paired Naive-Evict baseline, vToken reduces retained KV blocks per request by 27.2\\%--72.3\\% and improves SLA-constrained throughput by up to 1.37$\\times$. Under a constrained active-KV budget, it extends the maximum feasible concurrency by up to 2$\\times$, while reducing the per-policy integration footprint from 500+ lines to under 50.",
       "tldr": "large language model serving faces a critical memory bottleneck: the kv cache grows with sequence length and batch size. pagedattention uses fixed-size memory blocks to reduce allocator-level fragmentation, but recent kv eviction algorithms operate at a token granularity finer…",
       "category": "Serving Systems",
@@ -379,7 +388,11 @@
         "Shuangchen Li",
         "Hongzhong Zheng"
       ],
-      "organizations": [],
+      "organizations": [
+        "School of Integrated Circuits, Peking University",
+        "Alibaba DAMO Academy",
+        "Alibaba Cloud Computing"
+      ],
       "abstract": "LLM serving is increasingly constrained by memory capacity as model weights, KV caches, and the number of served model variants continue to grow. This report examines High-Bandwidth Flash (HBF) as a capacity-oriented extension to HBM-based serving systems. We first discuss how HBF can be integrated into the GPU memory hierarchy without undermining the bandwidth expected by the compute die. We then model the system-level value of added capacity as expanded residency for read-mostly model-state objects. Under this view, HBF can improve MoE serving by enabling more expert replicas and can improve multi-model serving by reducing model loading and supporting hot-model replication. Our simulation results show that these benefits depend on preserving the HBM-resident execution path while using HBF to expand the resident set of model weights.",
       "tldr": "llm serving is increasingly constrained by memory capacity as model weights, kv caches, and the number of served model variants continue to grow. this report examines high-bandwidth flash (hbf) as a capacity-oriented extension to hbm-based serving systems. we first discuss how…",
       "category": "Serving Systems",
@@ -409,7 +422,11 @@
         "Jiarong Xing",
         "Haoran Qiu"
       ],
-      "organizations": [],
+      "organizations": [
+        "Rice University",
+        "Microsoft Research",
+        "Microsoft Azure Research"
+      ],
       "abstract": "Achieving cost efficiency while meeting strict user-facing SLOs (e.g., time-to-first-token) remains a fundamental challenge for cloud GPU clusters serving large language models (LLMs). Autoscaling is the key mechanism for cluster resource management, yet a basic system design question is open for serving LLMs: what should be the unit of scaling? Existing approaches primarily treat the entire model as a monolithic scaling unit--simple but unable to capture the fine-grained dynamics of inference workloads. As a result, such coarse-grained scaling often leads to either SLO violations under bursty demand or significant GPU under-utilization. Our characterization reveals substantial operator heterogeneity, exposing operator-level elasticity as a viable scaling primitive. We present OpScale, a practical operator-level orchestration framework of profiling, provisioning, placement, and runtime serving. OpScale is designed to tackle the high complexity and the space explosion problem, arising from operating at this finer granularity. Evaluated with production traces on up to 40 A100s and 24 GB200s, OpScale attains SLOs with up to 36.3% fewer GPUs and 28% less power, or achieves 44% higher throughput under fixed cost budgets.",
       "tldr": "achieving cost efficiency while meeting strict user-facing slos (e.g., time-to-first-token) remains a fundamental challenge for cloud gpu clusters serving large language models (llms). autoscaling is the key mechanism for cluster resource management, yet a basic system design…",
       "category": "Serving Systems",
@@ -439,7 +456,12 @@
         "Lei Xue",
         "Guangxu Zhu"
       ],
-      "organizations": [],
+      "organizations": [
+        "Shenzhen International Center for Industrial and Applied Mathematics",
+        "Shenzhen Research Institute of Big Data",
+        "The Chinese University of Hong Kong, Shenzhen",
+        "Shenzhen Campus of Sun Yat-sen University"
+      ],
       "abstract": "Routing each query to a cost-effective large language model (LLM) is critical for balancing quality and cost, yet most routers rely on a centralized task center to predict model performance, creating an information-risk mismatch and a scalability bottleneck as the model pool grows. We propose a market-based routing paradigm that shifts ex-ante prediction to LLM providers via a reverse auction, where providers bid with self-predicted success probabilities and execution costs. To account for inherently noisy provider predictions and center evaluations, we introduce the \\textit{\\textbf{E}rror-\\textbf{A}ware \\textbf{R}everse \\textbf{A}uction \\textbf{M}echanism} (EA-RAM), which explicitly models this inherent Dual Error. We prove that EA-RAM is Bayesian incentive compatible and individually rational under the Dual Error, establish sufficient conditions for center rationality, and derive an explicit welfare-loss bound. We further identify robustness effects: opposite-signed errors can cancel, vanishing-tail link functions (e.g., logistic) stabilize clear-cut cases via saturation, and extra noise smooths belief maps, reducing the gains from marginal manipulation. Experiments on simulations and real-world benchmarks show that EA-RAM is robust to the Dual Error and achieves a better cost--performance Pareto frontier than centralized baselines, with additional gains when providers contribute local information, validating its practical effectiveness.",
       "tldr": "routing each query to a cost-effective large language model (llm) is critical for balancing quality and cost, yet most routers rely on a centralized task center to predict model performance, creating an information-risk mismatch and a scalability bottleneck as the model pool…",
       "category": "Serving Systems",
@@ -496,7 +518,9 @@
         "Michael Birbas",
         "Alexios Birbas"
       ],
-      "organizations": [],
+      "organizations": [
+        "Dept. of ECE, University of Patras"
+      ],
       "abstract": "Edge AI deployment demands neural architectures that are simultaneously accurate, computationally efficient, and hardware-deployable - a challenge addressed by hardware-aware Neural Architecture Search (NAS). While recent works incorporate quantization directly into the NAS loop, these approaches expand search complexity and tightly couple architecture and quantization design. The simpler post-search quantization strategy has received little analytical attention: the effects of Post-Training Quantization (PTQ) on the NAS-discovered Pareto structure remain uncharacterised, and no framework combines quantized architecture mapping onto reconfigurable accelerators with automated hardware exploration. This paper addresses both gaps. First, a three-stage pipeline is proposed: a hardware-agnostic Pareto rank surrogate frontend on NAS-Bench-201, a quantization bridge with Pareto-aware filtering and feedback control, and an evolutionary Domain Space Exploration (DSE) backend on CGRA4ML for optimal hardware mapping. Second, an empirical study characterises how INT4 PTQ perturbs the NAS-Bench-201 Pareto space through formal stability metrics on ground-truth data for all 15,625 architectures, and demonstrates that an FP32 zero-shot surrogate outperforms a dedicated INT4-trained surrogate in Pareto space coverage across two standard search strategies.",
       "tldr": "edge ai deployment demands neural architectures that are simultaneously accurate, computationally efficient, and hardware-deployable - a challenge addressed by hardware-aware neural architecture search (nas). while recent works incorporate quantization directly into the nas…",
       "category": "Quantization",
@@ -527,7 +551,11 @@
         "Yesheng Liang",
         "Zhijian Liu"
       ],
-      "organizations": [],
+      "organizations": [
+        "Princeton",
+        "Independent Researcher",
+        "UC San Diego"
+      ],
       "abstract": "Vision-Language-Action (VLA) models promise to bring end-to-end reasoning to autonomous driving, but their computational cost remains far too high for real-time control. The core challenge is structural: VLA inference is not a single bottleneck but a cascade of four. Visual encoding wastes compute on overlapping video frames; language-model prefill recomputes context that could be carried over from the previous timestep; reasoning tokens are generated serially despite low entropy; and flow-matching denoising applies uniform compute to a non-uniform velocity field. Addressing any one stage in isolation leaves the others untouched. We propose FlashDrive, an algorithm-system co-design framework that targets all four stages simultaneously. Our key insight is that each bottleneck admits a distinct, lightweight algorithmic shortcut: temporal overlap enables streaming KV-cache reuse across frames; the low per-token entropy and strong intra-block correlations of driving-domain reasoning make a non-autoregressive diffusion drafter highly effective for speculative decoding; and the velocity field's structure---sharp at the endpoints, flat in the middle---permits adaptive step caching that concentrates compute where it matters. Layered on system-level CUDA Graph compilation and kernel fusion, these techniques compound. Applied to Alpamayo 1.5-10B with W4A8 quantization, FlashDrive reduces end-to-end latency from 717ms to 151ms (4.7x) while leaving accuracy essentially unchanged: minADE6@6.4s shifts by only 0.08m, minADE1 improves, and closed-loop collision and off-road rates improve in simulation. By raising a 10B-parameter reasoning VLA from 1.4~Hz to 6.6~Hz on a single GPU, FlashDrive moves end-to-end autonomous driving substantially closer to real-time deployment.",
       "tldr": "vision-language-action (vla) models promise to bring end-to-end reasoning to autonomous driving, but their computational cost remains far too high for real-time control. the core challenge is structural: vla inference is not a single bottleneck but a cascade of four. visual…",
       "category": "Quantization",
@@ -584,7 +612,10 @@
         "Uraz Odyurt",
         "Amirreza Yousefzadeh"
       ],
-      "organizations": [],
+      "organizations": [
+        "Computer Architecture for Embedded Systems, University of Twente",
+        "Faculty of Engineering Technology, University of Twente"
+      ],
       "abstract": "Vision Transformers (ViTs) demonstrate exceptional performance in computer vision but suffer from large parameter counts and quadratic computational complexity, severely limiting their deployment on resource-constrained edge hardware. While recursive weight-sharing reduces parameter counts and token merging mitigates computational and memory bottlenecks, integrating these two paradigms without costly retraining is non-trivial, leaving this intersection largely unexplored. We propose MergeOver, a post-training approach that integrates Token Merging (ToMe) into the recursively weight-shared Sliced Recursive Transformer (SReT). Through an Unmerge tracking stack, constraint-safe merge-rate adjustment, and synchronised token-mass tracking across spatial permutations, MergeOver resolves the spatial and merging constraints of this integration. We further employ a stage-wise single-shot schedule that performs token reduction at the first block of each stage and maintains a fixed sequence length throughout its subsequent recursive iterations. Benchmarked on ImageNet-1K, our selected configuration reduces top-1 accuracy by 1.47 percentage points. On the GPU, it reduces peak activation memory by 37.3% and 38.4% at batch sizes 1 and 16, while throughput decreases by 21.7% at batch size 1 but increases by 21.7% at batch size 16. On a Raspberry Pi 5 (ARM CPU), it reduces latency by 2.4% and 17.6% at batch sizes 1 and 16. These results show that MergeOver can recover a meaningful part of the throughput and memory cost that recursive weight-sharing introduces, without retraining, and provides a baseline for combining token merging with hierarchical recursive transformers.",
       "tldr": "vision transformers (vits) demonstrate exceptional performance in computer vision but suffer from large parameter counts and quadratic computational complexity, severely limiting their deployment on resource-constrained edge hardware. while recursive weight-sharing reduces…",
       "category": "Model Compression",
@@ -616,7 +647,10 @@
         "Kui Jiang"
       ],
       "organizations": [
-        "Meta"
+        "School of Computer Science and Engineering, Macau University of Science and Technology, Macao SAR, China",
+        "Macau University of Science and Technology Zhuhai Research Institute, Zhuhai, Guangdong, China",
+        "Hubei Key Laboratory of Transportation Internet of Things, School of Computer Science and Artificial Intelligence, Wuhan",
+        "School of Food and Biological Engineering, Jiangsu University, Zhenjiang, Jiangsu, China"
       ],
       "abstract": "RNA-Protein Interactions (RPIs) are critical for regulating cellular functions. While traditional wet-lab experiments for RPI detection are costly and time-consuming, Deep Learning (DL) methods provide an efficient computational alternative for RPI Prediction (RPIP). In particular, Graph Neural Networks (GNNs) are promising, as they naturally model RPI networks. However, existing GNN-based methods often rely on homogeneous graphs or predefined meta-paths, which limit their ability to handle data sparsity and to generalize to cold-start scenarios involving unknown molecules. To address these limitations, we propose Edge Generation-guided Relation-aware Learning (EGRL), a novel framework with several key components: implicit meta-path learning to capture relational semantics without handcrafted paths; a multi-relation-aware attention mechanism for adaptive fusion of interaction patterns; a graph generator that predicts potential (\"soft\") edges to support cold-start nodes; and a multi-feature fusion predictor for final interaction scoring. EGRL is jointly trained with a primary task loss and an auxiliary generator loss. Comprehensive evaluations on four benchmark datasets demonstrate that EGRL achieves competitive overall performance. More importantly, it exhibits superior generalization in cold-start settings, achieving an Area Under the Receiver Operating Characteristic curve (AUROC) of 0.867 and an Area Under the Precision-Recall curve (AUPR) of 0.861 on unknown molecules, corresponding to improvements of 8.6% in AUROC and 5.0% in AUPR over prior state-of-the-art methods. The code will be released soon.",
       "tldr": "rna-protein interactions (rpis) are critical for regulating cellular functions. while traditional wet-lab experiments for rpi detection are costly and time-consuming, deep learning (dl) methods provide an efficient computational alternative for rpi prediction (rpip). in…",
@@ -650,7 +684,10 @@
         "Xin Wang",
         "Wenming Yang"
       ],
-      "organizations": [],
+      "organizations": [
+        "Shenzhen International Graduate School, Tsinghua University",
+        "LIGHTSPEED"
+      ],
       "abstract": "While 3D Vision-Language Models (3D VLMs) have demonstrated remarkable spatial reasoning capabilities, they suffer from massive visual token counts that create severe computational bottlenecks during inference. Existing token pruning methods primarily rely on diversity-based selection, discarding similar tokens to maximize dispersion. However, in 3D environments, this approach frequently drops representative prototype tokens in favor of outliers, breaking the multi-view consistencies and geometric structures essential for spatial reasoning. In this paper, we propose a paradigm shift for 3D VLM token pruning: from maximizing diversity to preserving visual evidence coverage. We introduce CoverPrune, a training-free framework that formulates inference-time token pruning as an Optimal Transport (OT) problem. To overcome the intractable combinatorial subset selection inherent in this formulation, we design the Feature-Spatial-Temporal (FST) transport cost and target capacity, along with an efficient Spatial-Guided Greedy Selection (SGS) algorithm to approximate the OT objective. Furthermore, we propose CoverPrune-Lite, an accelerated variant utilizing spatially structured local matching for minimal overhead. Extensive experiments across multiple 3D visual-spatial reasoning benchmarks demonstrate that our methods achieve state-of-the-art token efficiency, maintaining robust reasoning performance even under highly aggressive pruning budgets. Visit our project website at https://github.com/Brucess/CoverPrune.",
       "tldr": "while 3d vision-language models (3d vlms) have demonstrated remarkable spatial reasoning capabilities, they suffer from massive visual token counts that create severe computational bottlenecks during inference. existing token pruning methods primarily rely on diversity-based…",
       "category": "Model Compression",
@@ -738,7 +775,9 @@
         "Jiawei Zhou"
       ],
       "organizations": [
-        "NVIDIA"
+        "University of Chicago",
+        "Independent Researcher",
+        "Stony Brook University"
       ],
       "abstract": "Transformer-based language models achieve strong performance but incur substantial inference cost due to repeated high-dimensional matrix multiplications. We propose Reduced Matrix Multiplication (RMM), a training-free, input-adaptive inference method that reduces Transformer matrix products by selecting informative slices along their contraction dimensions, without modifying model weights. Under a simple retention-ratio control, RMM provides a smooth and predictable accuracy-efficiency trade-off. Across language models ranging from 1B to 70B parameters, we find that reduction tolerance depends on the model family, task, component, and retention ratio, although it often improves with model scale. Under moderate reduction, RMM remains robust across the evaluated discriminative, autoregressive generation, and long-context settings. We further show that the same principle extends to multimodal vision-language inference. Mechanistic ablations reveal a structural asymmetry within Transformers: attention-side computations are substantially more reducible than MLP components. Finally, wall-clock benchmarks with custom kernels on an NVIDIA A100 show that these computational savings can translate into practical runtime gains, especially at longer sequence lengths. Together, these results position RMM as a scalable direction for input-adaptive inference-time optimization.",
       "tldr": "transformer-based language models achieve strong performance but incur substantial inference cost due to repeated high-dimensional matrix multiplications. we propose reduced matrix multiplication (rmm), a training-free, input-adaptive inference method that reduces transformer…",
@@ -770,7 +809,9 @@
         "Endadul Hoque",
         "Alex K. Jones"
       ],
-      "organizations": [],
+      "organizations": [
+        "Syracuse University, Brown University"
+      ],
       "abstract": "Secure, private multi-tenant execution spanning processors, memory, and accelerators remains one of the most significant challenges in modern edge computing systems. Simultaneously, processing-in-memory (PIM) has emerged as an effective approach for reducing the Von Neumann bottleneck by moving computation closer to data. Existing trusted execution environments (TEEs) establish trust only within the processor, protecting data while it traverses untrusted resources such as the memory bus. Consequently, trusted computation cannot be performed directly within memory. We present YAVIN, a unified trusted computing base (TCB) that extends the TEE beyond the processor to encompass both processor execution and a dedicated memory region supporting trusted processing-in-memory execution while treating the memory bus as untrusted. Leveraging the dedicated protected memory regions already established by conventional TEE architectures, YAVIN enables data to be decrypted, processed, and re-encrypted by either processor or PIM execution while remaining within the TEE. To realize this unified TCB, YAVIN presents the first PIM implementations of the LightSaber KEM post-quantum cryptosystem and ASCON-128 authenticated encryption, co-designing both algorithms for efficient DRAM execution to establish and maintain shared cryptographic state. Finally, we demonstrate how cryptography-PIM co-design for tensor-based workloads reorganizes computation to satisfy the ordering constraints imposed by authenticated encryption with minimal performance overhead while simultaneously enabling bit-sliced ordering that limits temporary plaintext exposure. Compared to the latest PIM AES implementation, YAVIN achieves more than a 20x speedup while incurring only 34% and 9.3% overhead when executing INT8 and INT32 quantized edge-class LLMs, respectively, relative to plaintext execution.",
       "tldr": "secure, private multi-tenant execution spanning processors, memory, and accelerators remains one of the most significant challenges in modern edge computing systems. simultaneously, processing-in-memory (pim) has emerged as an effective approach for reducing the von neumann…",
       "category": "Edge, On-device & Heterogeneous Hardware",
@@ -803,7 +844,9 @@
         "Kang He",
         "Chengru Song"
       ],
-      "organizations": [],
+      "organizations": [
+        "KlingAI Research"
+      ],
       "abstract": "In expert-parallel (EP) MoE serving, every layer synchronizes at the slowest GPU. Dispatchers balance token counts (EPLB, LPLB, UltraEP) or activated-expert counts (METRO), assuming expert time is linear in one. Measurements on two datacenter GPU generations show it is neither: below $\\nstar\\!\\approx\\!156$--$168$ tokens, HBM weight streaming dominates---cost attaches to \\emph{activated replicas}, not tokens; above it, grouped GEMM rounds tokens to 128-tile $M$-tiles, so \\emph{splitting} an expert adds padded compute. A max-affine profile $t=\\max(a+bG,\\,c+βN)$ captures both regimes. Realistic decode batches hold hot experts in the linear regime and cold in the flat \\emph{simultaneously}; recorded batches show proxy dispatches differ by $1.4$--$1.6\\times$ in modeled block time (p95 up to $1.7\\times$), and \\emph{which} proxy wins flips with the regime. We formalize per-batch dispatch as a fixed-charge makespan problem---NP-hard on two fully replicated GPUs, polynomial in degenerate limits---and present \\sys{}, a makespan-aware dispatcher solving it in milliseconds off the critical path; its SGLang integration runs out-of-process and fuses dispatch with count collection into one in-graph kernel. Anchored by an 8-GPU Testbed~A microbenchmark, \\sys{} stays within 1\\% of the best fixed baseline everywhere and wins by up to $15.5\\%$ where regimes mix. End-to-end on Testbed~B, Qwen3-235B (inside the win region) gains $4$--$6\\%$ throughput and cuts p99 latency by ${\\sim}15.6\\%$; DeepSeek-V3 (outside, communication-dominated) shows only mechanism cost. A phase diagram, not a universal win, is the claim: it predicts both outcomes before deployment.",
       "tldr": "in expert-parallel (ep) moe serving, every layer synchronizes at the slowest gpu. dispatchers balance token counts (eplb, lplb, ultraep) or activated-expert counts (metro), assuming expert time is linear in one. measurements on two datacenter gpu generations show it is neither…",
       "category": "Edge, On-device & Heterogeneous Hardware",
@@ -834,9 +877,7 @@
         "Chao Zhang",
         "Jianping Wu"
       ],
-      "organizations": [
-        "Intel"
-      ],
+      "organizations": [],
       "abstract": "A common way for attackers to compromise victim systems is hijacking sensitive operations (e.g., control-flow transfers) with attacker-controlled inputs. Existing solutions in general only protect parts of these targets and have high performance overheads, which are impractical and hard to deploy on systems with limited resources (e.g., IoT devices) or for low-level software like kernels and bare-metal firmware. In this paper, we present a lightweight hardware-software co-design solution ROLoad-PMP to protect sensitive operations from being hijacked for low-level software. First, we propose new instructions, which only load data from read-only memory regions with specific keys, to guarantee the integrity of pointees pointed by (potentially corrupted) data pointers. Then, we provide a program hardening mechanism to protect sensitive operations, by classifying and placing their operands into read-only memory with different keys at compile-time and loading them with ROLoad-PMP-family instructions at runtime. We have implemented an FPGA-based prototype of ROLoad-PMP based on RISC-V, and demonstrated an important defense application, i.e., forward-edge control-flow integrity. Results showed that ROLoad-PMP only costs few extra hardware resources (< 1.40%). Moreover, it enables many lightweight (e.g., with negligible overheads < 0.853%) defenses, and provides broader and stronger security guarantees than existing hardware solutions, e.g., ARM BTI and Intel CET.",
       "tldr": "a common way for attackers to compromise victim systems is hijacking sensitive operations (e.g., control-flow transfers) with attacker-controlled inputs. existing solutions in general only protect parts of these targets and have high performance overheads, which are impractical…",
       "category": "Edge, On-device & Heterogeneous Hardware",
@@ -866,7 +907,12 @@
         "David Cock",
         "Timothy Roscoe"
       ],
-      "organizations": [],
+      "organizations": [
+        "SBB",
+        "ETH Zürich",
+        "Huawei",
+        "Neutrality"
+      ],
       "abstract": "The proliferation of heterogeneous components in modern computing systems has been accompanied by new higher bandwidth and lower latency interconnects. These interfaces and protocols are enormously complex and the process of developing, debugging, and analyzing FPGA-based implementations requires significant engineering work. Moreover, once a functional implementation is completed, optimization of the controller and associated software requires processing potentially hundreds of gigabytes of trace data. In this paper, we present Dryas, an open source tool for analyzing such an interconnect. We developed our tool, using minimal hardware resources, alongside an FPGA implementation of a very high speed, low latency (30~GiB/s, 200~ns) interconnect. With our run-time reprogrammable overlay engine we can inspect this interconnect to find rare, complex, or transient events even at full operation. This filtering engine is based on non-deterministic finite automata (NFAs), efficiently implemented using state transition elements (STEs), allowing us to trace events at a cache-line granularity. Moreover we can change the filters in less than a second, without reprogramming the FPGA or interfering with the running application. This data enables not only debugging the implementation of the interconnect itself, but analyzing the behavior of accelerated applications. We examine the mathematical basis for using NFAs and describe their implementation on a real coherent CPU-FPGA research platform. We then evaluate the scalability of Dryas for various size NFAs, followed by two different use cases: debugging FPGA implementation of the interconnect and analyzing cache behavior.",
       "tldr": "the proliferation of heterogeneous components in modern computing systems has been accompanied by new higher bandwidth and lower latency interconnects. these interfaces and protocols are enormously complex and the process of developing, debugging, and analyzing fpga-based…",
       "category": "Edge, On-device & Heterogeneous Hardware",
