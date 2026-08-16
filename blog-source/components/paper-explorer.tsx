@@ -14,7 +14,7 @@ export type PaperExplorerProps = {
 type ActiveCategory = PaperCategoryId | "all";
 
 export function PaperExplorer({ categories, papers }: PaperExplorerProps) {
-  const [activeCategory, setActiveCategory] = useState<ActiveCategory>("quantization");
+  const [activeCategory, setActiveCategory] = useState<ActiveCategory>("all");
   const [query, setQuery] = useState("");
   const index = useMemo(() => buildPaperIndex(papers), [papers]);
   const normalizedQuery = query.trim();

@@ -1,4 +1,4 @@
-:HL["/blog/_next/static/chunks/0kx9r2xch9i4v.css","style"]
+:HL["/blog/_next/static/chunks/29yubt9q8z6ln.css","style"]
 :HL["/blog/_next/static/media/374a88ea0960b3d4-s.p.2fz20jxmyia8o.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["/blog/_next/static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["/blog/_next/static/media/a10ca92f9d04ca77.p.3iz8-bp_wd3p8.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
@@ -8,4 +8,4 @@
 :HL["/blog/dock-blue-railing.jpg","image"]
 :HL["/blog/surfboard-birds.jpg","image"]
 :HL["/blog/building-stars.jpg","image"]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"posts","param":null,"prefetchHints":0,"slots":{"children":{"name":"slug","param":{"type":"d","key":"research-blog-placeholder","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}},"staleTime":300,"buildId":"C1Tx3L5_VQKfgsgi6hAvI"}
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"posts","param":null,"prefetchHints":0,"slots":{"children":{"name":"slug","param":{"type":"d","key":"research-blog-placeholder","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}},"staleTime":300,"buildId":"Irlb1IJXL49xRuZ3wtwTD"}
