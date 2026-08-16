@@ -603,6 +603,7 @@ a {
   --papers-muted: #676a64;
   --papers-faint: #747770;
   --papers-line: #d8dad4;
+  --papers-control-line: #858982;
   --papers-signal: #4d6970;
   --papers-wash: #f8f9f7;
   overflow-x: clip;
@@ -668,7 +669,7 @@ a {
 
 .papers-page .papers-filter-toolbar {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(10rem, 13rem);
+  grid-template-columns: minmax(0, 1fr) minmax(16rem, 18rem);
   align-items: end;
   gap: 1rem;
 }
@@ -753,7 +754,7 @@ a {
 .papers-page .papers-topic select {
   width: 100%;
   min-height: 2.75rem;
-  border: 1px solid var(--papers-line);
+  border: 1px solid var(--papers-control-line);
   border-radius: 0;
   background: var(--papers-wash);
   color: var(--papers-ink);
