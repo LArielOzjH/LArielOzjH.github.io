@@ -139,8 +139,20 @@ describe("PaperExplorer", () => {
 
     await user.type(screen.getByRole("searchbox", { name: "Search papers" }), "no-such-paper-xyz");
     expect(screen.getByRole("heading", { level: 2, name: "Search results" })).toBeTruthy();
-    expect(screen.getByText("No papers match your search.")).toBeTruthy();
+    expect(
+      screen.getByText(
+        "No papers match. Try a shorter query in titles, abstracts, tags, categories, authors, organizations, or venues."
+      )
+    ).toBeTruthy();
     expect(screen.queryByText("No papers are available in this category yet.")).toBeNull();
     expect(screen.getAllByText("0 papers")).toHaveLength(1);
+  });
+
+  it("shows a neutral message when the entire paper library is empty", () => {
+    render(<PaperExplorer categories={PAPER_CATEGORIES} papers={[]} />);
+
+    expect(screen.getByText("No papers are available in the library yet.")).toBeTruthy();
+    expect(screen.queryByText("No papers are available in this category yet.")).toBeNull();
+    expect(screen.queryByText(/No papers match/)).toBeNull();
   });
 });

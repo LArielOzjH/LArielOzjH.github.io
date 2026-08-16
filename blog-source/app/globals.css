@@ -601,7 +601,7 @@ a {
 .papers-page {
   --papers-ink: #242621;
   --papers-muted: #676a64;
-  --papers-faint: #92958e;
+  --papers-faint: #747770;
   --papers-line: #d8dad4;
   --papers-signal: #4d6970;
   --papers-wash: #f5f7f5;
@@ -735,7 +735,8 @@ a {
   max-width: 100%;
   margin-top: 1rem;
   gap: 1.45rem;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
   border-bottom: 1px solid var(--papers-line);
 }
 

@@ -95,7 +95,11 @@ export function PaperExplorer({ categories, papers }: PaperExplorerProps) {
         </div>
       ) : (
         <p className="papers-empty">
-          {normalizedQuery ? "No papers match your search." : "No papers are available in this category yet."}
+          {normalizedQuery
+            ? "No papers match. Try a shorter query in titles, abstracts, tags, categories, authors, organizations, or venues."
+            : papers.length === 0
+              ? "No papers are available in the library yet."
+              : "No papers are available in this category yet."}
         </p>
       )}
     </section>
