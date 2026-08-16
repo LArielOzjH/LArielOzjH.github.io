@@ -42,7 +42,7 @@ export function PaperExplorer({ categories, papers }: PaperExplorerProps) {
 
   return (
     <section className="papers-explorer" aria-label="Paper library explorer">
-      <div className="papers-search">
+      <div className="papers-search" role="search" aria-label="Search papers">
         <label htmlFor="paper-search">Search papers</label>
         <div className="papers-search-control">
           <input

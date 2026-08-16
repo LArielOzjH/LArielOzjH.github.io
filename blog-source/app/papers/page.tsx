@@ -16,8 +16,8 @@ export default function PapersPage() {
       <main className="mx-auto max-w-[960px] px-6 pb-24 pt-10 md:px-8 md:pt-14">
         <header className="papers-hero">
           <div>
-            <h1>Systems &amp; AI Infrastructure Papers</h1>
-            <p className="papers-intro">A searchable, continuously accumulated library of research on efficient inference, model systems, and AI hardware.</p>
+            <h1>Research Index</h1>
+            <p className="papers-intro">A searchable reading index for efficient inference, model systems, and AI hardware.</p>
           </div>
           <div className="papers-update">
             <span>Last updated</span>

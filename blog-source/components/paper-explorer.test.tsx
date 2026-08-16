@@ -47,6 +47,21 @@ const papers: Paper[] = [
 ];
 
 describe("PaperExplorer", () => {
+  it("renders the searchable research index structure", () => {
+    render(<PaperExplorer categories={PAPER_CATEGORIES} papers={papers} />);
+
+    const search = screen.getByRole("search", { name: "Search papers" });
+    expect(within(search).getByRole("searchbox", { name: "Search papers" })).toBeTruthy();
+
+    const categories = screen.getByRole("navigation", { name: "Paper categories" });
+    expect(within(categories).getByRole("button", { name: "Quantization" })).toBeTruthy();
+    expect(screen.getByText("1 paper", { selector: ".papers-results-count" })).toBeTruthy();
+
+    const article = screen.getByRole("article");
+    expect(within(article).getByRole("link", { name: /on arXiv/ })).toBeTruthy();
+    expect(within(article).getByRole("link", { name: /Open PDF/ })).toBeTruthy();
+  });
+
   it("starts in Quantization with one accessible seven-button category control", () => {
     render(<PaperExplorer categories={PAPER_CATEGORIES} papers={papers} />);
 
