@@ -61,23 +61,27 @@ describe("paper page CSS contracts", () => {
     expect(select).toMatch(/border:\s*1px solid var\(--papers-control-line\)\s*;/);
   });
 
-  it("uses responsive ICLR-inspired paper cards without fixed heights or lift effects", () => {
+  it("uses light, responsive ICLR-inspired paper cards without lift effects", () => {
     const grid = extractRule(".papers-page .papers-grid");
     const card = extractRule(".papers-page .paper-card");
+    const papersPage = extractRule(".papers-page");
 
     expect(grid).toMatch(/display:\s*grid\s*;/);
     expect(grid).toMatch(/grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)\s*;/);
     expect(extractRules(".papers-page .papers-grid").some((rule) => /grid-template-columns:\s*minmax\(0, 1fr\)\s*;/.test(rule))).toBe(true);
-    expect(card).toMatch(/background:\s*var\(--papers-wash\)\s*;/);
-    expect(card).toMatch(/border:\s*1px solid var\(--papers-line\)\s*;/);
-    expect(card).toMatch(/border-top:\s*3px solid var\(--papers-signal\)\s*;/);
-    expect(card).not.toMatch(/(?:min-)?height\s*:/);
+    expect(papersPage).toMatch(/--papers-card:\s*#ffffff\s*;/);
+    expect(papersPage).toMatch(/--papers-card-line:\s*#[\da-f]{6}\s*;/i);
+    expect(papersPage).toMatch(/--papers-card-signal:\s*#[\da-f]{6}\s*;/i);
+    expect(card).toMatch(/background:\s*var\(--papers-card\)\s*;/);
+    expect(card).toMatch(/border:\s*1px solid var\(--papers-card-line\)\s*;/);
+    expect(card).toMatch(/border-top:\s*2px solid var\(--papers-card-signal\)\s*;/);
     expect(card).not.toMatch(/box-shadow\s*:/);
     expect(card).not.toMatch(/transform\s*:/);
   });
 
-  it("keeps paper cards content-sized and wraps untrusted paper text", () => {
+  it("keeps every visible paper card the same height and wraps untrusted paper text", () => {
     const grid = extractRule(".papers-page .papers-grid");
+    const card = extractRule(".papers-page .paper-card");
     const meta = extractRule(".papers-page .paper-card-meta");
     const untrustedTextSelectors = [
       ".papers-page .paper-card-title",
@@ -88,8 +92,11 @@ describe("paper page CSS contracts", () => {
       ".papers-page .paper-card-tags span"
     ];
 
-    expect(grid).toMatch(/align-items:\s*start\s*;/);
-    expect(meta).not.toMatch(/margin-top\s*:/);
+    expect(grid).toMatch(/grid-auto-rows:\s*1fr\s*;/);
+    expect(grid).toMatch(/align-items:\s*stretch\s*;/);
+    expect(card).toMatch(/height:\s*100%\s*;/);
+    expect(card).toMatch(/box-sizing:\s*border-box\s*;/);
+    expect(meta).toMatch(/margin-top:\s*auto\s*;/);
     for (const selector of untrustedTextSelectors) {
       expect(declarationsFor(selector), `Expected ${selector} to wrap long untrusted text`).toMatch(
         /overflow-wrap:\s*anywhere\s*;/
