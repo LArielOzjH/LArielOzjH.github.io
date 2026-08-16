@@ -87,8 +87,16 @@ def parse_atom(xml_text: str) -> list[dict]:
 
 def infer_venue(comment: str, journal_ref: str) -> str:
     text = " ".join(value for value in (comment, journal_ref) if value)
-    match = re.search(r"(?i)\b(DAC|ASP-DAC|DATE|ICCAD|ISCA|HPCA|ISSCC|ICLR|ICML|ACL|EMNLP|NeurIPS|CVPR|ECCV|MICRO|MLSys)\b[^,;]*", text)
-    return match.group(0).strip() if match else ""
+    match = re.search(r"(?i)\b(DAC|ASP-DAC|DATE|ICCAD|ISCA|HPCA|ISSCC|ICLR|ICML|ACL|EMNLP|NeurIPS|CVPR|ECCV|MICRO|MLSys)\b[^,;.]*", text)
+    if not match:
+        return ""
+    venue = re.sub(r"\s*https?://\S*", "", match.group(0)).strip().rstrip(":")
+    while venue and venue[-1] in ")]" and (
+        (venue[-1] == ")" and venue.count(")") > venue.count("("))
+        or (venue[-1] == "]" and venue.count("]") > venue.count("["))
+    ):
+        venue = venue[:-1].rstrip()
+    return venue
 
 
 def fetch_arxiv(url: str | None = None, opener=urllib.request.urlopen) -> str:
@@ -117,6 +125,8 @@ def fetch_all_arxiv(day: date | None = None, page_size: int = 100, opener=urllib
     entries = []
     start = 0
     while True:
+        if start:
+            time_module.sleep(1)
         page = parse_atom(fetch_arxiv(build_arxiv_url(day, start=start, max_results=page_size), opener))
         entries.extend(page)
         if len(page) < page_size:

@@ -25,6 +25,12 @@ class FetchPaperTests(unittest.TestCase):
         self.assertEqual(infer_venue("Accepted at DAC 2026", ""), "DAC 2026")
         self.assertEqual(infer_venue("", "Proceedings of ISCA 2025"), "ISCA 2025")
 
+    def test_infer_venue_stops_at_sentence_breaks_and_drops_urls(self):
+        self.assertEqual(infer_venue("ECCV 2026. 21 pages in total. Code at https://example.com", ""), "ECCV 2026")
+        self.assertEqual(infer_venue("(DAC '26). 7 pages", ""), "DAC '26")
+        self.assertEqual(infer_venue("ICLR Workshop Paper https://openreview.net/forum?id=x", ""), "ICLR Workshop Paper")
+        self.assertEqual(infer_venue("Accepted to EMNLP 2026 (non-archival)", ""), "EMNLP 2026 (non-archival)")
+
     def test_parse_atom_normalizes_versions_and_extracts_affiliations(self):
         entries = parse_atom(FIXTURE.read_text())
         self.assertEqual(len(entries), 2)
