@@ -49,17 +49,22 @@ describe("paper page CSS contracts", () => {
     const papersPage = extractRule(".papers-page");
     const select = extractRule(".papers-page .papers-topic select");
     const controlLine = papersPage.match(/--papers-control-line:\s*(#[\da-f]{6})\s*;/i)?.[1];
-    const wash = papersPage.match(/--papers-wash:\s*(#[\da-f]{6})\s*;/i)?.[1];
 
     expect(toolbar).toMatch(/display:\s*grid\s*;/);
     expect(toolbar).toMatch(/grid-template-columns:\s*minmax\(0, 1fr\) minmax\(16rem, 18rem\)\s*;/);
     expect(globalsCss).not.toContain(".papers-page .papers-categories");
     expect(extractRules(".papers-page .papers-filter-toolbar").some((rule) => /grid-template-columns:\s*minmax\(0, 1fr\)\s*;/.test(rule))).toBe(true);
     expect(controlLine, "Expected a page-scoped Topic control border color").toBeDefined();
-    expect(wash, "Expected the paper wash color").toBeDefined();
     expect(contrastRatio(controlLine ?? "#ffffff", "#ffffff")).toBeGreaterThanOrEqual(3);
-    expect(contrastRatio(controlLine ?? "#ffffff", wash ?? "#ffffff")).toBeGreaterThanOrEqual(3);
     expect(select).toMatch(/border:\s*1px solid var\(--papers-control-line\)\s*;/);
+    expect(select).toMatch(/background-color:\s*#ffffff\s*;/);
+  });
+
+  it("keeps the search field free of a focus outline box", () => {
+    const focusRule = extractRule(".papers-page .papers-search input:focus-visible");
+
+    expect(focusRule).toMatch(/outline:\s*0\s*;/);
+    expect(extractRule(".papers-page .papers-search-control:focus-within")).toMatch(/border-bottom-color:/);
   });
 
   it("uses light, responsive ICLR-inspired paper cards without lift effects", () => {

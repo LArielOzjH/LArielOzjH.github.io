@@ -20,7 +20,7 @@ export function PaperCard({ paper }: { paper: Paper }) {
         </div>
       </div>
       <div className="paper-card-meta">
-        <time dateTime={paper.published}>{paper.published}</time>
+        <time dateTime={paper.published}>{formatPublished(paper.published)}</time>
       </div>
     </article>
   );
@@ -29,4 +29,13 @@ export function PaperCard({ paper }: { paper: Paper }) {
 function formatAuthors(authors: string[]) {
   const visible = authors.slice(0, 4).join(", ");
   return authors.length > 4 ? `${visible}, …` : visible;
+}
+
+function formatPublished(date: string) {
+  return new Intl.DateTimeFormat("en", {
+    month: "short",
+    day: "2-digit",
+    year: "numeric",
+    timeZone: "UTC"
+  }).format(new Date(`${date}T00:00:00Z`));
 }

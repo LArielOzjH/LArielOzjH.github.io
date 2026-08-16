@@ -605,7 +605,6 @@ a {
   --papers-line: #d8dad4;
   --papers-control-line: #858982;
   --papers-signal: #4d6970;
-  --papers-wash: #f8f9f7;
   --papers-card: #ffffff;
   --papers-card-line: #e7e8e4;
   --papers-card-signal: #c5d0d1;
@@ -734,9 +733,10 @@ a {
   opacity: 1;
 }
 
+/* The underline color change from :focus-within is the focus indicator;
+   the default outline box reads as noise on a borderless field. */
 .papers-page .papers-search input:focus-visible {
-  outline: 2px solid var(--papers-signal);
-  outline-offset: 2px;
+  outline: 0;
 }
 
 .papers-page .papers-search input::-webkit-search-cancel-button {
@@ -781,7 +781,7 @@ a {
   border: 1px solid var(--papers-control-line);
   border-radius: 0;
   appearance: none;
-  background-color: var(--papers-wash);
+  background-color: #ffffff;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23676a64' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 6l4 4 4-4'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 0.7rem center;
