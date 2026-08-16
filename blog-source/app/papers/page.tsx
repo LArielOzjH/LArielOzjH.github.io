@@ -1,15 +1,15 @@
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
-import { PaperCard } from "@/components/paper-card";
-import { getPaperDigest } from "@/lib/papers";
+import { PaperExplorer } from "@/components/paper-explorer";
+import { getPaperLibrary } from "@/lib/papers";
 
 export const metadata = {
-  title: "Daily Systems & AI Infrastructure Papers",
-  description: "A filtered daily digest of papers on efficient inference and AI systems."
+  title: "Searchable Systems & AI Paper Library",
+  description: "An accumulated, searchable library of systems and AI research papers."
 };
 
 export default function PapersPage() {
-  const digest = getPaperDigest();
+  const library = getPaperLibrary();
   return (
     <div className="papers-page min-h-screen bg-white">
       <SiteHeader />
@@ -17,26 +17,15 @@ export default function PapersPage() {
         <header className="papers-hero">
           <div>
             <h1>Systems &amp; AI Infrastructure Papers</h1>
-            <p className="papers-intro">A focused daily selection from arXiv, filtered for leading research groups working on efficient inference, model systems, and heterogeneous hardware.</p>
+            <p className="papers-intro">A searchable, continuously accumulated library of research on efficient inference, model systems, and AI hardware.</p>
           </div>
           <div className="papers-update">
             <span>Last updated</span>
-            <time dateTime={digest.lastUpdated}>{formatDate(digest.lastUpdated)}</time>
+            <time dateTime={library.lastUpdated}>{formatDate(library.lastUpdated)}</time>
           </div>
         </header>
 
-        <div className="papers-sections">
-          {digest.categories.map((category) => (
-            <details className="papers-section" key={category.id} id={category.id}>
-              <summary className="papers-section-heading">
-                <span>{category.name}</span>
-              </summary>
-              {category.papers.length ? (
-                <div className="papers-grid">{category.papers.map((paper) => <PaperCard key={paper.id} paper={paper} />)}</div>
-              ) : <p className="papers-empty">No matching papers in this snapshot.</p>}
-            </details>
-          ))}
-        </div>
+        <PaperExplorer categories={library.categories} papers={library.papers} />
       </main>
       <SiteFooter />
     </div>

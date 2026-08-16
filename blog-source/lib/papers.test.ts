@@ -6,7 +6,7 @@ describe("paper digest", () => {
     const digest = getPaperDigest();
     expect(PAPER_CATEGORIES).toHaveLength(6);
     expect(digest.categories).toHaveLength(6);
-    expect(PAPER_CATEGORIES.some((category) => category.id === "distributed-inference")).toBe(false);
+    expect(PAPER_CATEGORIES.map((category) => category.id)).not.toContain("distributed-inference");
     expect(digest.categories.map((category) => category.name)).toEqual(PAPER_CATEGORIES.map((category) => category.name));
   });
 

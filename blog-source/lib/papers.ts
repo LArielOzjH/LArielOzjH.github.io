@@ -10,6 +10,7 @@ export const PAPER_CATEGORIES = [
 ] as const;
 
 export type PaperCategoryId = (typeof PAPER_CATEGORIES)[number]["id"];
+export type PaperCategory = (typeof PAPER_CATEGORIES)[number];
 
 export type Paper = {
   id: string;
@@ -33,20 +34,36 @@ export type Paper = {
 export type PaperDigest = {
   lastUpdated: string;
   source: "arxiv";
-  categories: Array<(typeof PAPER_CATEGORIES)[number] & { papers: Paper[] }>;
+  categories: Array<PaperCategory & { papers: Paper[] }>;
+};
+
+export type PaperLibrary = {
+  lastUpdated: string;
+  source: "arxiv";
+  categories: typeof PAPER_CATEGORIES;
+  papers: Paper[];
 };
 
 type Snapshot = { lastUpdated?: string; source?: "arxiv"; papers?: Paper[] };
 
-export function getPaperDigest(): PaperDigest {
+export function getPaperLibrary(): PaperLibrary {
   const snapshot = paperSnapshot as Snapshot;
-  const papers = snapshot.papers ?? [];
   return {
     lastUpdated: snapshot.lastUpdated ?? "",
     source: "arxiv",
+    categories: PAPER_CATEGORIES,
+    papers: snapshot.papers ?? []
+  };
+}
+
+export function getPaperDigest(): PaperDigest {
+  const library = getPaperLibrary();
+  return {
+    lastUpdated: library.lastUpdated,
+    source: library.source,
     categories: PAPER_CATEGORIES.map((category) => ({
       ...category,
-      papers: papers.filter((paper) => paper.categoryId === category.id)
+      papers: library.papers.filter((paper) => paper.categoryId === category.id)
     }))
   };
 }
