@@ -60,11 +60,14 @@ describe("paper page CSS contracts", () => {
     expect(select).toMatch(/background-color:\s*#ffffff\s*;/);
   });
 
-  it("keeps the search field free of a focus outline box", () => {
-    const focusRule = extractRule(".papers-page .papers-search input:focus-visible");
+  it("keeps the search field and Topic select free of focus outline boxes", () => {
+    const inputFocus = extractRule(".papers-page .papers-search input:focus-visible");
+    const selectFocus = extractRule(".papers-page .papers-topic select:focus-visible");
 
-    expect(focusRule).toMatch(/outline:\s*0\s*;/);
+    expect(inputFocus).toMatch(/outline:\s*0\s*;/);
     expect(extractRule(".papers-page .papers-search-control:focus-within")).toMatch(/border-bottom-color:/);
+    expect(selectFocus).toMatch(/outline:\s*0\s*;/);
+    expect(selectFocus, "Keyboard focus still needs a visible cue on the select").toMatch(/border-color:/);
   });
 
   it("uses a dedicated hint tone for the search placeholder", () => {
@@ -90,8 +93,8 @@ describe("paper page CSS contracts", () => {
     expect(card).not.toMatch(/transform\s*:/);
   });
 
-  it("keeps every card the same height via fixed content slots and anchors the meta colophon", () => {
-    const grids = extractRules(".papers-page .papers-grid");
+  it("sizes cards to their content per row, caps bylines at two lines, and anchors the meta colophon", () => {
+    const grid = extractRule(".papers-page .papers-grid");
     const card = extractRule(".papers-page .paper-card");
     const meta = extractRule(".papers-page .paper-card-meta");
     const untrustedTextSelectors = [
@@ -102,9 +105,10 @@ describe("paper page CSS contracts", () => {
       ".papers-page .paper-card-tldr p"
     ];
 
-    // Desktop rows share one global height; the single-column layout releases it.
-    expect(grids.some((rule) => /grid-auto-rows:\s*1fr\s*;/.test(rule))).toBe(true);
-    expect(grids.some((rule) => /grid-auto-rows:\s*auto\s*;/.test(rule))).toBe(true);
+    // Cards stretch to the tallest card in their own row only; a global
+    // grid-auto-rows: 1fr would force every row to the tallest row on the page.
+    expect(grid).not.toMatch(/grid-auto-rows\s*:/);
+    expect(grid).toMatch(/align-items:\s*stretch\s*;/);
     expect(card).toMatch(/height:\s*100%\s*;/);
     expect(card).toMatch(/box-sizing:\s*border-box\s*;/);
     expect(meta).toMatch(/margin-top:\s*auto\s*;/);
@@ -112,20 +116,15 @@ describe("paper page CSS contracts", () => {
     expect(extractRule(".papers-page .paper-card-meta time")).toMatch(/margin-left:\s*auto\s*;/);
     expect(extractRule(".papers-page .paper-card-venue")).toMatch(/font-family:\s*var\(--font-mono\)\s*;/);
 
-    // Fixed slots: two title lines, two author lines, two organization lines, six TL;DR lines.
-    expect(extractRule(".papers-page .paper-card-title")).toMatch(/min-height:\s*calc\(2 \* 1\.32em\)\s*;/);
-    for (const [selector, lines, lineHeight] of [
-      [".papers-page .paper-card-authors", 2, "1.45"],
-      [".papers-page .paper-card-orgs", 2, "1.45"],
-      [".papers-page .paper-card-tldr p", 6, "1.55"]
-    ] as const) {
+    // Authors and organizations never exceed two lines; the TL;DR stays unclamped.
+    for (const selector of [".papers-page .paper-card-authors", ".papers-page .paper-card-orgs"]) {
       const rule = declarationsFor(selector);
-      expect(rule, `Expected ${selector} to clamp to ${lines} lines`).toMatch(
-        new RegExp(`-webkit-line-clamp:\\s*${lines}\\s*;`)
-      );
-      expect(rule).toMatch(new RegExp(`min-height:\\s*calc\\(${lines} \\* ${lineHeight.replace(".", "\\.")}em\\)\\s*;`));
+      expect(rule, `Expected ${selector} to clamp to 2 lines`).toMatch(/-webkit-line-clamp:\s*2\s*;/);
       expect(rule).toMatch(/overflow:\s*hidden\s*;/);
+      expect(rule).not.toMatch(/min-height\s*:/);
     }
+    expect(declarationsFor(".papers-page .paper-card-tldr p")).not.toMatch(/-webkit-line-clamp/);
+    expect(extractRule(".papers-page .paper-card-title")).not.toMatch(/min-height\s*:/);
 
     for (const selector of untrustedTextSelectors) {
       expect(declarationsFor(selector), `Expected ${selector} to wrap long untrusted text`).toMatch(
