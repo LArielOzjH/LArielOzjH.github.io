@@ -844,6 +844,7 @@ a {
 .papers-page .papers-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: 1fr;
   align-items: stretch;
   gap: 1rem;
   margin-top: 1.1rem;
@@ -875,6 +876,7 @@ a {
 
 
 .papers-page .paper-card-title {
+  min-height: calc(2 * 1.32em);
   margin: 0;
   color: var(--papers-ink);
   font-family: var(--font-serif);
@@ -915,6 +917,13 @@ a {
 }
 
 .papers-page .paper-card-authors {
+  /* Fixed content slots keep every card the same height: two author lines,
+     two organization lines (reserved even when empty), six TL;DR lines. */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  min-height: calc(2 * 1.45em);
   margin-top: 0.48rem;
   color: var(--papers-muted);
   font-family: var(--font-serif);
@@ -923,6 +932,11 @@ a {
 }
 
 .papers-page .paper-card-orgs {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  min-height: calc(2 * 1.45em);
   margin-top: 0.12rem;
   color: var(--papers-muted);
   font-family: var(--font-serif);
@@ -933,7 +947,7 @@ a {
 
 .papers-page .paper-card-venue {
   min-width: 0;
-  font-family: var(--font-toc);
+  font-family: var(--font-mono);
   line-height: 1.5;
 }
 
@@ -954,6 +968,11 @@ a {
 }
 
 .papers-page .paper-card-tldr p {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 6;
+  overflow: hidden;
+  min-height: calc(6 * 1.55em);
   margin: 0;
   color: var(--papers-muted);
   font-family: var(--font-serif);
@@ -1016,5 +1035,6 @@ a {
 
   .papers-page .papers-grid {
     grid-template-columns: minmax(0, 1fr);
+    grid-auto-rows: auto;
   }
 }

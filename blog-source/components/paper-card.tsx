@@ -12,7 +12,7 @@ export function PaperCard({ paper }: { paper: Paper }) {
           </a>
         </h3>
         <p className="paper-card-authors">{formatAuthors(paper.authors)}</p>
-        {paper.organizations.length ? <p className="paper-card-orgs">{paper.organizations.join(" · ")}</p> : null}
+        <p className="paper-card-orgs">{paper.organizations.join(" · ")}</p>
         <div className="paper-card-tldr">
           <span>TL;DR</span>
           <p>{paper.tldr}</p>
