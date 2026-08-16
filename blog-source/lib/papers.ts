@@ -9,6 +9,8 @@ export const PAPER_CATEGORIES = [
   { id: "edge-on-device-hardware", name: "Edge, On-device & Hardware" }
 ] as const;
 
+export type PaperCategoryId = (typeof PAPER_CATEGORIES)[number]["id"];
+
 export type Paper = {
   id: string;
   title: string;
