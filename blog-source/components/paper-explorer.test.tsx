@@ -62,8 +62,11 @@ describe("PaperExplorer", () => {
     expect(screen.getByText("1 paper", { selector: ".papers-results-count" })).toBeTruthy();
 
     const article = screen.getByRole("article");
-    expect(within(article).getByRole("link", { name: /on arXiv/ })).toBeTruthy();
-    expect(within(article).getByRole("link", { name: /Open PDF/ })).toBeTruthy();
+    expect(
+      within(article).getByRole("link", { name: "Accurate Low-Bit Quantization" }).getAttribute("href")
+    ).toBe("https://arxiv.org/abs/example");
+    expect(within(article).queryByRole("link", { name: /on arXiv/ })).toBeNull();
+    expect(within(article).queryByRole("link", { name: /Open PDF/ })).toBeNull();
   });
 
   it("starts in Quantization with one accessible seven-option Topic control", () => {
@@ -110,10 +113,12 @@ describe("PaperExplorer", () => {
     const title = screen.getByRole("heading", { name: "DARTree: Speculative Diffusion Decoding" });
     const article = title.closest("article");
     expect(article).not.toBeNull();
-    expect(within(article as HTMLElement).getByRole("link", { name: /Open DARTree.* on arXiv/ }).getAttribute("href")).toBe(
-      "https://arxiv.org/abs/2601.00001"
-    );
-    expect(within(article as HTMLElement).getByRole("link", { name: /Open PDF for DARTree/ })).toBeTruthy();
+    expect(
+      within(article as HTMLElement)
+        .getByRole("link", { name: "DARTree: Speculative Diffusion Decoding" })
+        .getAttribute("href")
+    ).toBe("https://arxiv.org/abs/2601.00001");
+    expect(within(article as HTMLElement).queryByRole("link", { name: /Open PDF/ })).toBeNull();
   });
 
   it("clearing a search keeps All selected and shows the complete library", async () => {

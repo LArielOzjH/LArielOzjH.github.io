@@ -119,6 +119,14 @@ describe("paper page CSS contracts", () => {
     }
   });
 
+  it("routes the card jump through the title link instead of a footer link row", () => {
+    const titleLink = extractRule(".papers-page .paper-card-title a");
+
+    expect(titleLink).toMatch(/color:\s*inherit\s*;/);
+    expect(titleLink).toMatch(/text-decoration:\s*none\s*;/);
+    expect(globalsCss).not.toContain(".paper-card-links");
+  });
+
   it("replaces the native select chrome with a scoped chevron", () => {
     const select = extractRule(".papers-page .papers-topic select");
 
