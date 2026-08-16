@@ -13,13 +13,13 @@ export function PaperCard({ paper }: { paper: Paper }) {
         </h3>
         <p className="paper-card-authors">{formatAuthors(paper.authors)}</p>
         {paper.organizations.length ? <p className="paper-card-orgs">{paper.organizations.join(" · ")}</p> : null}
-        {paper.venue ? <p className="paper-card-venue">{paper.venue}</p> : null}
         <div className="paper-card-tldr">
           <span>TL;DR</span>
           <p>{paper.tldr}</p>
         </div>
       </div>
       <div className="paper-card-meta">
+        {paper.venue ? <span className="paper-card-venue">{paper.venue}</span> : null}
         <time dateTime={paper.published}>{formatPublished(paper.published)}</time>
       </div>
     </article>

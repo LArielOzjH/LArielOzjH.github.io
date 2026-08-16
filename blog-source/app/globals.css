@@ -602,6 +602,7 @@ a {
   --papers-ink: #242621;
   --papers-muted: #676a64;
   --papers-faint: #747770;
+  --papers-hint: #a6a8a1;
   --papers-line: #d8dad4;
   --papers-control-line: #858982;
   --papers-signal: #4d6970;
@@ -729,7 +730,7 @@ a {
 }
 
 .papers-page .papers-search input::placeholder {
-  color: var(--papers-faint);
+  color: var(--papers-hint);
   opacity: 1;
 }
 
@@ -872,6 +873,7 @@ a {
   overflow-wrap: anywhere;
 }
 
+
 .papers-page .paper-card-title {
   margin: 0;
   color: var(--papers-ink);
@@ -908,8 +910,7 @@ a {
 }
 
 .papers-page .paper-card-authors,
-.papers-page .paper-card-orgs,
-.papers-page .paper-card-venue {
+.papers-page .paper-card-orgs {
   margin: 0;
 }
 
@@ -931,11 +932,9 @@ a {
 }
 
 .papers-page .paper-card-venue {
-  margin-top: 0.2rem;
-  color: var(--papers-faint);
+  min-width: 0;
   font-family: var(--font-toc);
-  font-size: 0.68rem;
-  line-height: 1.45;
+  line-height: 1.5;
 }
 
 .papers-page .paper-card-tldr {
@@ -976,8 +975,10 @@ a {
 }
 
 .papers-page .paper-card-meta time {
+  margin-left: auto;
   font-family: var(--font-mono);
   line-height: 1.5;
+  white-space: nowrap;
 }
 
 .papers-page .papers-empty {

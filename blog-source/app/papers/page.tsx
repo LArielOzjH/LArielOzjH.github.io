@@ -4,7 +4,7 @@ import { PaperExplorer } from "@/components/paper-explorer";
 import { getPaperLibrary } from "@/lib/papers";
 
 export const metadata = {
-  title: "Neural & Silicon",
+  title: "Neural & Silicon Shelf",
   description: "Archive for AI Infra and Computer Architecture."
 };
 
@@ -16,7 +16,7 @@ export default function PapersPage() {
       <main className="mx-auto max-w-[960px] px-6 pb-24 pt-10 md:px-8 md:pt-14">
         <header className="papers-hero">
           <div>
-            <h1>Neural &amp; Silicon</h1>
+            <h1>Neural &amp; Silicon Shelf</h1>
             <p className="papers-intro">Archive for AI Infra and Computer Architecture.</p>
           </div>
           <div className="papers-update">

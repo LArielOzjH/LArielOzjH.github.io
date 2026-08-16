@@ -67,6 +67,11 @@ describe("paper page CSS contracts", () => {
     expect(extractRule(".papers-page .papers-search-control:focus-within")).toMatch(/border-bottom-color:/);
   });
 
+  it("uses a dedicated hint tone for the search placeholder", () => {
+    expect(extractRule(".papers-page")).toMatch(/--papers-hint:\s*#[\da-f]{6}\s*;/i);
+    expect(extractRule(".papers-page .papers-search input::placeholder")).toMatch(/color:\s*var\(--papers-hint\)\s*;/);
+  });
+
   it("uses light, responsive ICLR-inspired paper cards without lift effects", () => {
     const grid = extractRule(".papers-page .papers-grid");
     const card = extractRule(".papers-page .paper-card");
@@ -105,6 +110,7 @@ describe("paper page CSS contracts", () => {
     expect(card).toMatch(/box-sizing:\s*border-box\s*;/);
     expect(meta).toMatch(/margin-top:\s*auto\s*;/);
     expect(meta).toMatch(/border-top:\s*1px solid var\(--papers-card-line\)\s*;/);
+    expect(extractRule(".papers-page .paper-card-meta time")).toMatch(/margin-left:\s*auto\s*;/);
     for (const selector of untrustedTextSelectors) {
       expect(declarationsFor(selector), `Expected ${selector} to wrap long untrusted text`).toMatch(
         /overflow-wrap:\s*anywhere\s*;/
