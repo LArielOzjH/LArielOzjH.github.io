@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState, type ChangeEvent } from "react";
+import { Search } from "lucide-react";
 import { PaperCard } from "@/components/paper-card";
 import { buildPaperIndex, searchPapers } from "@/lib/paper-search";
 import type { Paper, PaperCategory, PaperCategoryId } from "@/lib/papers";
@@ -42,43 +43,42 @@ export function PaperExplorer({ categories, papers }: PaperExplorerProps) {
 
   return (
     <section className="papers-explorer" aria-label="Paper library explorer">
-      <div className="papers-search" role="search" aria-label="Search papers">
-        <label htmlFor="paper-search">Search papers</label>
-        <div className="papers-search-control">
-          <input
-            id="paper-search"
-            type="search"
-            value={query}
-            onChange={handleQueryChange}
-            placeholder="Search titles, abstracts, authors, organizations, and tags"
-          />
-          {query ? (
-            <button type="button" onClick={() => setQuery("")} aria-label="Clear search">
-              Clear
-            </button>
-          ) : null}
+      <div className="papers-filter-toolbar">
+        <div className="papers-search" role="search" aria-label="Search papers">
+          <label htmlFor="paper-search">Search papers</label>
+          <div className="papers-search-control">
+            <Search aria-hidden="true" size={16} strokeWidth={1.8} />
+            <input
+              id="paper-search"
+              type="search"
+              value={query}
+              onChange={handleQueryChange}
+              placeholder="Search titles, abstracts, authors, organizations, and tags"
+            />
+            {query ? (
+              <button type="button" onClick={() => setQuery("")} aria-label="Clear search">
+                Clear
+              </button>
+            ) : null}
+          </div>
+        </div>
+
+        <div className="papers-topic">
+          <label htmlFor="paper-topic">Topic</label>
+          <select
+            id="paper-topic"
+            value={activeCategory}
+            onChange={(event) => selectCategory(event.target.value as ActiveCategory)}
+          >
+            <option value="all">All</option>
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
-
-      <nav className="papers-categories" aria-label="Paper categories">
-        <button
-          type="button"
-          aria-pressed={activeCategory === "all"}
-          onClick={() => selectCategory("all")}
-        >
-          All
-        </button>
-        {categories.map((category) => (
-          <button
-            key={category.id}
-            type="button"
-            aria-pressed={activeCategory === category.id}
-            onClick={() => selectCategory(category.id)}
-          >
-            {category.name}
-          </button>
-        ))}
-      </nav>
 
       <div className="papers-results-heading">
         <h2>{normalizedQuery ? "Search results" : activeHeading}</h2>

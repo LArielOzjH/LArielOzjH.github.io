@@ -4,8 +4,8 @@ import { PaperExplorer } from "@/components/paper-explorer";
 import { getPaperLibrary } from "@/lib/papers";
 
 export const metadata = {
-  title: "Searchable Systems & AI Paper Library",
-  description: "An accumulated, searchable library of systems and AI research papers."
+  title: "Neural & Silicon",
+  description: "Archive for AI Infra and Computer Architecture."
 };
 
 export default function PapersPage() {
@@ -16,8 +16,8 @@ export default function PapersPage() {
       <main className="mx-auto max-w-[960px] px-6 pb-24 pt-10 md:px-8 md:pt-14">
         <header className="papers-hero">
           <div>
-            <h1>Research Index</h1>
-            <p className="papers-intro">A searchable reading index for efficient inference, model systems, and AI hardware.</p>
+            <h1>Neural &amp; Silicon</h1>
+            <p className="papers-intro">Archive for AI Infra and Computer Architecture.</p>
           </div>
           <div className="papers-update">
             <span>Last updated</span>

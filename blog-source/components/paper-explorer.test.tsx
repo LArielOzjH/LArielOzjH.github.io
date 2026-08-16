@@ -47,14 +47,18 @@ const papers: Paper[] = [
 ];
 
 describe("PaperExplorer", () => {
-  it("renders the searchable research index structure", () => {
+  it("renders a compact search and Topic toolbar with a seven-option native select", () => {
     render(<PaperExplorer categories={PAPER_CATEGORIES} papers={papers} />);
 
     const search = screen.getByRole("search", { name: "Search papers" });
     expect(within(search).getByRole("searchbox", { name: "Search papers" })).toBeTruthy();
+    expect(search.querySelector('svg[aria-hidden="true"]')).not.toBeNull();
 
-    const categories = screen.getByRole("navigation", { name: "Paper categories" });
-    expect(within(categories).getByRole("button", { name: "Quantization" })).toBeTruthy();
+    const topic = screen.getByRole("combobox", { name: "Topic" });
+    expect(within(topic).getAllByRole("option")).toHaveLength(7);
+    expect(within(topic).getByRole("option", { name: "All" })).toBeTruthy();
+    expect(within(topic).getByRole("option", { name: "Quantization" })).toBeTruthy();
+    expect(screen.queryByRole("navigation", { name: "Paper categories" })).toBeNull();
     expect(screen.getByText("1 paper", { selector: ".papers-results-count" })).toBeTruthy();
 
     const article = screen.getByRole("article");
@@ -62,13 +66,12 @@ describe("PaperExplorer", () => {
     expect(within(article).getByRole("link", { name: /Open PDF/ })).toBeTruthy();
   });
 
-  it("starts in Quantization with one accessible seven-button category control", () => {
+  it("starts in Quantization with one accessible seven-option Topic control", () => {
     render(<PaperExplorer categories={PAPER_CATEGORIES} papers={papers} />);
 
-    const navigation = screen.getByRole("navigation", { name: "Paper categories" });
-    expect(within(navigation).getAllByRole("button")).toHaveLength(7);
-    expect(screen.getByRole("button", { name: "Quantization" }).getAttribute("aria-pressed")).toBe("true");
-    expect(screen.getByRole("button", { name: "All" }).getAttribute("aria-pressed")).toBe("false");
+    const topic = screen.getByRole("combobox", { name: "Topic" }) as HTMLSelectElement;
+    expect(within(topic).getAllByRole("option")).toHaveLength(7);
+    expect(topic.value).toBe("quantization");
     expect(screen.getByRole("heading", { level: 2, name: "Quantization" })).toBeTruthy();
     expect(screen.getByText("Accurate Low-Bit Quantization")).toBeTruthy();
     expect(screen.queryByText("Elastic Serving for Language Models")).toBeNull();
@@ -81,10 +84,10 @@ describe("PaperExplorer", () => {
 
     const searchbox = screen.getByRole("searchbox", { name: "Search papers" });
     await user.type(searchbox, "DARTree");
-    await user.click(screen.getByRole("button", { name: "Serving Systems" }));
+    await user.selectOptions(screen.getByRole("combobox", { name: "Topic" }), "serving-systems");
 
     expect((searchbox as HTMLInputElement).value).toBe("");
-    expect(screen.getByRole("button", { name: "Serving Systems" }).getAttribute("aria-pressed")).toBe("true");
+    expect((screen.getByRole("combobox", { name: "Topic" }) as HTMLSelectElement).value).toBe("serving-systems");
     expect(screen.getByRole("heading", { level: 2, name: "Serving Systems" })).toBeTruthy();
     expect(screen.getByText("Elastic Serving for Language Models")).toBeTruthy();
     expect(screen.queryByText(/DARTree/)).toBeNull();
@@ -97,10 +100,10 @@ describe("PaperExplorer", () => {
     const searchbox = screen.getByRole("searchbox", { name: "Search papers" });
     expect(screen.queryByRole("button", { name: "Clear search" })).toBeNull();
     await user.type(searchbox, "   ");
-    expect(screen.getByRole("button", { name: "Quantization" }).getAttribute("aria-pressed")).toBe("true");
+    expect((screen.getByRole("combobox", { name: "Topic" }) as HTMLSelectElement).value).toBe("quantization");
     await user.type(searchbox, "DARTree");
 
-    expect(screen.getByRole("button", { name: "All" }).getAttribute("aria-pressed")).toBe("true");
+    expect((screen.getByRole("combobox", { name: "Topic" }) as HTMLSelectElement).value).toBe("all");
     expect(screen.getByRole("heading", { level: 2, name: "Search results" })).toBeTruthy();
     expect(screen.getByRole("button", { name: "Clear search" })).toBeTruthy();
 
@@ -120,7 +123,7 @@ describe("PaperExplorer", () => {
     await user.type(screen.getByRole("searchbox", { name: "Search papers" }), "DARTree");
     await user.click(screen.getByRole("button", { name: "Clear search" }));
 
-    expect(screen.getByRole("button", { name: "All" }).getAttribute("aria-pressed")).toBe("true");
+    expect((screen.getByRole("combobox", { name: "Topic" }) as HTMLSelectElement).value).toBe("all");
     expect(screen.getByRole("heading", { level: 2, name: "All" })).toBeTruthy();
     expect(screen.getByText("Accurate Low-Bit Quantization")).toBeTruthy();
     expect(screen.getByText("Elastic Serving for Language Models")).toBeTruthy();
@@ -133,7 +136,7 @@ describe("PaperExplorer", () => {
     const user = userEvent.setup();
     render(<PaperExplorer categories={PAPER_CATEGORIES} papers={papers} />);
 
-    await user.click(screen.getByRole("button", { name: "Model Compression" }));
+    await user.selectOptions(screen.getByRole("combobox", { name: "Topic" }), "model-compression");
     expect(screen.getByText("No papers are available in this category yet.")).toBeTruthy();
     expect(screen.queryByText("No papers match your search.")).toBeNull();
 

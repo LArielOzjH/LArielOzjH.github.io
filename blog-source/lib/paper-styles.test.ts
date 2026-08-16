@@ -11,6 +11,11 @@ function extractRule(selector: string): string {
   return match?.[1] ?? "";
 }
 
+function extractRules(selector: string): string[] {
+  const escapedSelector = selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return [...globalsCss.matchAll(new RegExp(`${escapedSelector}\\s*\\{([^}]*)\\}`, "g"))].map((match) => match[1]);
+}
+
 function relativeLuminance(hex: string): number {
   const channels = hex
     .slice(1)
@@ -26,10 +31,28 @@ function relativeLuminance(hex: string): number {
 }
 
 describe("paper page CSS contracts", () => {
-  it("keeps the base category rail horizontally scrollable", () => {
-    const categoryRail = extractRule(".papers-page .papers-categories");
+  it("replaces the category rail with a compact responsive filter toolbar", () => {
+    const toolbar = extractRule(".papers-page .papers-filter-toolbar");
 
-    expect(categoryRail).toMatch(/overflow-x:\s*auto\s*;/);
+    expect(toolbar).toMatch(/display:\s*grid\s*;/);
+    expect(toolbar).toMatch(/grid-template-columns:\s*minmax\(0, 1fr\) minmax\(10rem, 13rem\)\s*;/);
+    expect(globalsCss).not.toContain(".papers-page .papers-categories");
+    expect(extractRules(".papers-page .papers-filter-toolbar").some((rule) => /grid-template-columns:\s*minmax\(0, 1fr\)\s*;/.test(rule))).toBe(true);
+  });
+
+  it("uses responsive ICLR-inspired paper cards without fixed heights or lift effects", () => {
+    const grid = extractRule(".papers-page .papers-grid");
+    const card = extractRule(".papers-page .paper-card");
+
+    expect(grid).toMatch(/display:\s*grid\s*;/);
+    expect(grid).toMatch(/grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)\s*;/);
+    expect(extractRules(".papers-page .papers-grid").some((rule) => /grid-template-columns:\s*minmax\(0, 1fr\)\s*;/.test(rule))).toBe(true);
+    expect(card).toMatch(/background:\s*var\(--papers-wash\)\s*;/);
+    expect(card).toMatch(/border:\s*1px solid var\(--papers-line\)\s*;/);
+    expect(card).toMatch(/border-top:\s*3px solid var\(--papers-signal\)\s*;/);
+    expect(card).not.toMatch(/(?:min-)?height\s*:/);
+    expect(card).not.toMatch(/box-shadow\s*:/);
+    expect(card).not.toMatch(/transform\s*:/);
   });
 
   it("keeps the faint paper text at WCAG AA contrast on white", () => {
