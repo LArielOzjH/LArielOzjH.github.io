@@ -80,7 +80,7 @@ export function PaperExplorer({ categories, papers }: PaperExplorerProps) {
         </div>
       </div>
 
-      <div className="papers-results-heading">
+      <div className="papers-results-heading" data-category={normalizedQuery ? "all" : activeCategory}>
         <h2>{normalizedQuery ? "Search results" : activeHeading}</h2>
         <p className="papers-results-count" aria-live="polite">
           {results.length} {results.length === 1 ? "paper" : "papers"}

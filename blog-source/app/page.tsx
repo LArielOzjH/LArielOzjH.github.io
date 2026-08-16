@@ -46,7 +46,7 @@ export default function HomePage() {
             <span className="pinned-papers-mark">↗</span>
             <span>
               <strong>Daily Systems &amp; AI Infrastructure Papers</strong>
-              <small>Eight focused tracks · curated from arXiv</small>
+              <small>Six focused tracks · curated from arXiv</small>
             </span>
           </Link>
         </section>

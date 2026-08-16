@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
+import { PAPER_CATEGORIES } from "./papers";
 
 const globalsCss = readFileSync(new URL("../app/globals.css", import.meta.url), "utf8");
 
@@ -79,7 +80,7 @@ describe("paper page CSS contracts", () => {
     expect(card).not.toMatch(/transform\s*:/);
   });
 
-  it("keeps every visible paper card the same height and wraps untrusted paper text", () => {
+  it("equalizes card heights per grid row, anchors the meta colophon, and wraps untrusted paper text", () => {
     const grid = extractRule(".papers-page .papers-grid");
     const card = extractRule(".papers-page .paper-card");
     const meta = extractRule(".papers-page .paper-card-meta");
@@ -92,16 +93,37 @@ describe("paper page CSS contracts", () => {
       ".papers-page .paper-card-tags span"
     ];
 
-    expect(grid).toMatch(/grid-auto-rows:\s*1fr\s*;/);
+    // Cards stretch to the tallest card in their own row only; a global
+    // grid-auto-rows: 1fr would force every row to the tallest row on the page.
+    expect(grid).not.toMatch(/grid-auto-rows\s*:/);
     expect(grid).toMatch(/align-items:\s*stretch\s*;/);
     expect(card).toMatch(/height:\s*100%\s*;/);
     expect(card).toMatch(/box-sizing:\s*border-box\s*;/);
     expect(meta).toMatch(/margin-top:\s*auto\s*;/);
+    expect(meta).toMatch(/border-top:\s*1px solid var\(--papers-card-line\)\s*;/);
     for (const selector of untrustedTextSelectors) {
       expect(declarationsFor(selector), `Expected ${selector} to wrap long untrusted text`).toMatch(
         /overflow-wrap:\s*anywhere\s*;/
       );
     }
+  });
+
+  it("assigns every curated track a scoped muted hue for the card top rule", () => {
+    const trackIds = PAPER_CATEGORIES.map((category) => category.id);
+
+    for (const trackId of trackIds) {
+      const rule = extractRule(`.papers-page [data-category="${trackId}"]`);
+      expect(rule, `Expected a hue override for track ${trackId}`).toMatch(
+        /--papers-card-signal:\s*#[\da-f]{6}\s*;/i
+      );
+    }
+  });
+
+  it("replaces the native select chrome with a scoped chevron", () => {
+    const select = extractRule(".papers-page .papers-topic select");
+
+    expect(select).toMatch(/appearance:\s*none\s*;/);
+    expect(select).toMatch(/background-image:\s*url\("data:image\/svg\+xml,/);
   });
 
   it("does not keep a page-specific reduced-motion block after removing paper-card motion", () => {

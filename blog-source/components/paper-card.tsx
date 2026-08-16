@@ -3,7 +3,7 @@ import type { Paper } from "@/lib/papers";
 
 export function PaperCard({ paper }: { paper: Paper }) {
   return (
-    <article className="paper-card">
+    <article className="paper-card" data-category={paper.categoryId}>
       <div className="paper-card-copy">
         <h3 className="paper-card-title">{paper.title}</h3>
         <p className="paper-card-authors">{formatAuthors(paper.authors)}</p>
