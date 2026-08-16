@@ -18,9 +18,6 @@ export function PaperCard({ paper }: { paper: Paper }) {
           <span>TL;DR</span>
           <p>{paper.tldr}</p>
         </div>
-        <div className="paper-card-tags" aria-label="Paper tags">
-          {paper.tags.map((tag) => <span key={tag}>{tag}</span>)}
-        </div>
       </div>
       <div className="paper-card-meta">
         <time dateTime={paper.published}>{paper.published}</time>

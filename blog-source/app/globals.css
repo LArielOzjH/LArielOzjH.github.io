@@ -868,8 +868,7 @@ a {
 .papers-page .paper-card-authors,
 .papers-page .paper-card-orgs,
 .papers-page .paper-card-venue,
-.papers-page .paper-card-tldr p,
-.papers-page .paper-card-tags span {
+.papers-page .paper-card-tldr p {
   overflow-wrap: anywhere;
 }
 
@@ -961,23 +960,6 @@ a {
   font-family: var(--font-serif);
   font-size: 0.88rem;
   line-height: 1.55;
-}
-
-.papers-page .paper-card-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem 0;
-  margin-top: 0.85rem;
-  color: var(--papers-faint);
-  font-family: var(--font-toc);
-  font-size: 0.66rem;
-  line-height: 1.4;
-}
-
-.papers-page .paper-card-tags span + span::before {
-  content: "·";
-  margin: 0 0.55rem;
-  color: var(--papers-line);
 }
 
 .papers-page .paper-card-meta {

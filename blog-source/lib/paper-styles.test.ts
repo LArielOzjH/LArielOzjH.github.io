@@ -89,8 +89,7 @@ describe("paper page CSS contracts", () => {
       ".papers-page .paper-card-authors",
       ".papers-page .paper-card-orgs",
       ".papers-page .paper-card-venue",
-      ".papers-page .paper-card-tldr p",
-      ".papers-page .paper-card-tags span"
+      ".papers-page .paper-card-tldr p"
     ];
 
     // Cards stretch to the tallest card in their own row only; a global
@@ -125,6 +124,7 @@ describe("paper page CSS contracts", () => {
     expect(titleLink).toMatch(/color:\s*inherit\s*;/);
     expect(titleLink).toMatch(/text-decoration:\s*none\s*;/);
     expect(globalsCss).not.toContain(".paper-card-links");
+    expect(globalsCss).not.toContain(".paper-card-tags");
   });
 
   it("replaces the native select chrome with a scoped chevron", () => {
