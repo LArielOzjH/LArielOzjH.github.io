@@ -1,10 +1,12 @@
 import json
+import sys
 import unittest
 from datetime import date, datetime, timezone
 from pathlib import Path
 from tempfile import TemporaryDirectory
+from unittest.mock import patch
 
-from scripts.papers.fetch_papers import build_arxiv_url, build_snapshot, infer_venue, parse_atom, write_snapshot
+from scripts.papers.fetch_papers import build_arxiv_url, build_snapshot, infer_venue, main, merge_snapshots, parse_atom, write_snapshot
 
 
 FIXTURE = Path(__file__).parent / "fixtures" / "arxiv-sample.xml"
@@ -47,6 +49,54 @@ class FetchPaperTests(unittest.TestCase):
         snapshot = build_snapshot([entry], datetime(2026, 8, 15, tzinfo=timezone.utc))
         self.assertEqual(len(snapshot["papers"]), 1)
         self.assertEqual(snapshot["papers"][0]["organizations"], [])
+
+    def test_merge_snapshots_appends_new_ids_and_normalizes_versions(self):
+        previous = {"lastUpdated": "old", "papers": [{"id": "2608.00001v1", "title": "A", "published": "2026-08-14", "updated": "2026-08-14"}]}
+        incoming = {"lastUpdated": "new", "papers": [{"id": "2608.00002v2", "title": "B", "published": "2026-08-15", "updated": "2026-08-15"}]}
+
+        merged = merge_snapshots(previous, incoming)
+
+        self.assertEqual([paper["id"] for paper in merged["papers"]], ["2608.00002", "2608.00001"])
+        self.assertEqual(merged["lastUpdated"], "new")
+
+    def test_merge_snapshots_replaces_existing_id_only_for_same_or_newer_update(self):
+        previous = {"papers": [{"id": "2608.00001v1", "title": "Stored", "published": "2026-08-15", "updated": "2026-08-15"}]}
+        older = {"papers": [{"id": "2608.00001v2", "title": "Older", "published": "2026-08-15", "updated": "2026-08-14"}]}
+        same_age = {"papers": [{"id": "2608.00001v3", "title": "Replacement", "published": "2026-08-15", "updated": "2026-08-15"}]}
+
+        self.assertEqual(merge_snapshots(previous, older)["papers"][0]["title"], "Stored")
+        replacement = merge_snapshots(previous, same_age)["papers"][0]
+        self.assertEqual((replacement["id"], replacement["title"]), ("2608.00001", "Replacement"))
+
+    def test_merge_snapshots_preserves_previous_snapshot_when_incoming_is_empty(self):
+        previous = {"lastUpdated": "old", "source": "arxiv", "papers": [{"id": "2608.00001"}]}
+
+        self.assertEqual(merge_snapshots(previous, {"lastUpdated": "new", "papers": []}), previous)
+
+    def test_merge_snapshots_sorts_by_published_title_and_id_descending(self):
+        incoming = {"papers": [
+            {"id": "1", "title": "Alpha", "published": "2026-08-15", "updated": "2026-08-15"},
+            {"id": "3", "title": "Beta", "published": "2026-08-15", "updated": "2026-08-15"},
+            {"id": "2", "title": "Beta", "published": "2026-08-15", "updated": "2026-08-15"},
+            {"id": "4", "title": "Zulu", "published": "2026-08-14", "updated": "2026-08-14"},
+        ]}
+
+        merged = merge_snapshots({"papers": []}, incoming)
+
+        self.assertEqual([paper["id"] for paper in merged["papers"]], ["3", "2", "1", "4"])
+
+    def test_main_merges_existing_output_with_new_snapshot(self):
+        with TemporaryDirectory() as directory:
+            target = Path(directory) / "papers.json"
+            target.write_text(json.dumps({"lastUpdated": "old", "source": "arxiv", "papers": [
+                {"id": "2608.00001", "title": "Stored", "published": "2026-08-14", "updated": "2026-08-14"}
+            ]}))
+            argv = ["fetch_papers.py", "--fixture", str(FIXTURE), "--output", str(target)]
+
+            with patch.object(sys, "argv", argv):
+                self.assertEqual(main(), 0)
+
+            self.assertEqual({paper["id"] for paper in json.loads(target.read_text())["papers"]}, {"2608.00001", "2608.12345"})
 
     def test_write_snapshot_replaces_atomically(self):
         with TemporaryDirectory() as directory:

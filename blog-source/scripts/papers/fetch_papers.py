@@ -149,6 +149,27 @@ def build_snapshot(entries: list[dict], now: datetime) -> dict:
     return {"lastUpdated": now.astimezone(timezone.utc).isoformat(), "source": "arxiv", "papers": papers}
 
 
+def merge_snapshots(previous: dict, incoming: dict) -> dict:
+    incoming_papers = incoming.get("papers", [])
+    if not incoming_papers:
+        return previous
+
+    papers_by_id = {}
+    for paper in previous.get("papers", []):
+        normalized = {**paper, "id": _strip_version(paper["id"])}
+        papers_by_id[normalized["id"]] = normalized
+
+    for paper in incoming_papers:
+        normalized = {**paper, "id": _strip_version(paper["id"])}
+        stored = papers_by_id.get(normalized["id"])
+        if stored is None or normalized.get("updated", "") >= stored.get("updated", ""):
+            papers_by_id[normalized["id"]] = normalized
+
+    papers = list(papers_by_id.values())
+    papers.sort(key=lambda paper: (paper.get("published", ""), paper.get("title", ""), paper["id"]), reverse=True)
+    return {**previous, **incoming, "papers": papers}
+
+
 def write_snapshot(snapshot: dict, output_path: Path) -> None:
     if not snapshot.get("papers") and output_path.exists():
         previous = json.loads(output_path.read_text())
@@ -168,6 +189,9 @@ def main() -> int:
     try:
         entries = parse_atom(args.fixture.read_text()) if args.fixture else fetch_all_arxiv()
         snapshot = build_snapshot(entries, datetime.now(timezone.utc))
+        if args.output.exists():
+            previous = json.loads(args.output.read_text())
+            snapshot = merge_snapshots(previous, snapshot)
         write_snapshot(snapshot, args.output)
     except Exception as error:
         print(f"paper fetch failed: {error}")
