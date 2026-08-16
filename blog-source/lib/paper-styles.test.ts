@@ -16,6 +16,13 @@ function extractRules(selector: string): string[] {
   return [...globalsCss.matchAll(new RegExp(`${escapedSelector}\\s*\\{([^}]*)\\}`, "g"))].map((match) => match[1]);
 }
 
+function declarationsFor(selector: string): string {
+  return [...globalsCss.matchAll(/([^{}]+)\{([^{}]*)\}/g)]
+    .filter((match) => match[1].split(",").some((candidate) => candidate.trim() === selector))
+    .map((match) => match[2])
+    .join("\n");
+}
+
 function relativeLuminance(hex: string): number {
   const channels = hex
     .slice(1)
@@ -53,6 +60,31 @@ describe("paper page CSS contracts", () => {
     expect(card).not.toMatch(/(?:min-)?height\s*:/);
     expect(card).not.toMatch(/box-shadow\s*:/);
     expect(card).not.toMatch(/transform\s*:/);
+  });
+
+  it("keeps paper cards content-sized and wraps untrusted paper text", () => {
+    const grid = extractRule(".papers-page .papers-grid");
+    const meta = extractRule(".papers-page .paper-card-meta");
+    const untrustedTextSelectors = [
+      ".papers-page .paper-card-title",
+      ".papers-page .paper-card-authors",
+      ".papers-page .paper-card-orgs",
+      ".papers-page .paper-card-venue",
+      ".papers-page .paper-card-tldr p",
+      ".papers-page .paper-card-tags span"
+    ];
+
+    expect(grid).toMatch(/align-items:\s*start\s*;/);
+    expect(meta).not.toMatch(/margin-top\s*:/);
+    for (const selector of untrustedTextSelectors) {
+      expect(declarationsFor(selector), `Expected ${selector} to wrap long untrusted text`).toMatch(
+        /overflow-wrap:\s*anywhere\s*;/
+      );
+    }
+  });
+
+  it("does not keep a page-specific reduced-motion block after removing paper-card motion", () => {
+    expect(globalsCss).not.toMatch(/@media\s*\(prefers-reduced-motion:\s*reduce\)\s*\{\s*\.papers-page/);
   });
 
   it("keeps the faint paper text at WCAG AA contrast on white", () => {

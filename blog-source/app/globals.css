@@ -797,6 +797,7 @@ a {
 .papers-page .papers-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
   gap: 0.85rem;
   margin-top: 0.55rem;
 }
@@ -813,6 +814,15 @@ a {
 
 .papers-page .paper-card-copy {
   min-width: 0;
+}
+
+.papers-page .paper-card-title,
+.papers-page .paper-card-authors,
+.papers-page .paper-card-orgs,
+.papers-page .paper-card-venue,
+.papers-page .paper-card-tldr p,
+.papers-page .paper-card-tags span {
+  overflow-wrap: anywhere;
 }
 
 .papers-page .paper-card-title {
@@ -899,7 +909,6 @@ a {
 
 .papers-page .paper-card-meta {
   display: flex;
-  margin-top: auto;
   min-width: 0;
   align-items: center;
   justify-content: space-between;
@@ -972,12 +981,5 @@ a {
 
   .papers-page .papers-grid {
     grid-template-columns: minmax(0, 1fr);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .papers-page .paper-card-links a {
-    scroll-behavior: auto;
-    transition: none;
   }
 }
