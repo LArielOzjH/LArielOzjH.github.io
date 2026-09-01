@@ -2,7 +2,7 @@ export const DATA = {
   hero: {
     title: "Hi! I'm ZhuoJun Han.", 
     subtitle: "Student and Researcher at Fudan University (FDU).",
-    desc: "Specialized in VLM Acceleration, Computing-In-Memory, Heterogeneous Computing Arch.",
+    desc: "Specialized in Memory-Centric Copmuting, AI Infra, LLM Accelerator.",
     bgImage: "/hero-bg.webp", 
   },
   profile: {
