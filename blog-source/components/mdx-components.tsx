@@ -1,7 +1,9 @@
 import type { MDXComponents } from "mdx/types";
 import { assetPath } from "@/lib/asset-path";
+import { AwardExplorer } from "./award-explorer";
 
 export const mdxComponents: MDXComponents = {
+  ArchitectureAwards: AwardExplorer,
   MarginNote: ({ children }) => <aside className="margin-note">{children}</aside>,
   table: (props) => (
     <div className="overflow-x-auto">
