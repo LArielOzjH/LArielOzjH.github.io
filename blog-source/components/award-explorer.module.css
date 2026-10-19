@@ -23,7 +23,7 @@
 .resultsBar button:disabled { color: var(--fg-muted); opacity: 0.55; cursor: default; }
 .yearGroup { margin-top: 1.5rem; }
 .yearHeading { display: flex; align-items: baseline; gap: 0.7rem; border-bottom: 1px solid var(--line-strong); padding-bottom: 0.5rem; }
-.yearHeading span:first-child { font-family: var(--font-mono); font-size: 20px; letter-spacing: -0.06em; }
+.yearHeading span:first-child { font-family: var(--font-geist-mono), monospace; font-size: 20px; letter-spacing: -0.06em; }
 .yearHeading span:last-child { color: var(--fg-muted); font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; }
 .explorer .list { list-style: none; padding: 0; margin: 0; }
 .explorer .row { list-style: none; padding: 1rem 0; margin: 0; border-bottom: 1px solid var(--line); }
