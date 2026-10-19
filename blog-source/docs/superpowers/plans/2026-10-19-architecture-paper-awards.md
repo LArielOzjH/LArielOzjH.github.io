@@ -40,3 +40,4 @@
 - Browser checks confirmed the default 113 annual awards, all 224 records, combined conference/year/category filters, the 2017 ISCA award for a 2002 paper, empty results, reset, title search, paper/evidence links, and the JSON download.
 - Desktop and 390px mobile screenshots were inspected. The mobile document width equals the viewport width, and visible article text is English.
 - Only the new article, archive data, filter library, component/styles and component registration were mirrored into the JunBlogs copy.
+- The first Pages run stopped before compilation because arXiv returned HTTP 429 in the existing daily-paper refresh. Push builds now use the saved paper library; scheduled and manual runs still refresh online and report fetch failures. A behavioral regression test covers offline content builds and mandatory refresh failures.

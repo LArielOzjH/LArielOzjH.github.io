@@ -5,7 +5,9 @@ portfolio_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 blog_root="$portfolio_root/blog-source"
 
 cd "$blog_root"
-if [[ -n "${BLOG_PAPERS_FIXTURE:-}" ]]; then
+if [[ "${BLOG_REFRESH_PAPERS:-true}" == "false" ]]; then
+  echo "Using the saved paper library; online refresh is disabled for this build."
+elif [[ -n "${BLOG_PAPERS_FIXTURE:-}" ]]; then
   python3 scripts/papers/fetch_papers.py --fixture "$BLOG_PAPERS_FIXTURE"
 else
   python3 scripts/papers/fetch_papers.py
